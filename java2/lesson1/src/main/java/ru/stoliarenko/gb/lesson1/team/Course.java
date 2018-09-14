@@ -9,7 +9,8 @@ public class Course {
 		// Preparing a team
 		Team theTeam = new Team();
 		System.out.println(theTeam);
-		// Puth them on the test
+		
+		// Put them on the test
 		Course.doIT(theTeam);
 		theTeam.showResults();
 	}
@@ -49,8 +50,11 @@ public class Course {
 		if (team == null) return "-404 team not found";
 		final int DIFFICULTY = 35;
 		int passed = team.overcomeOneByOne(DIFFICULTY);
-		if (passed == Team.getTeamCapacity()) return "+Great success! Every team member did his excersizes.";
-		else if (passed == 0 || !team.overcomeAsATeam(DIFFICULTY)) return "-Failure! Team cant even warm up!";
+		final boolean IS_EVERYONE_PASSED = passed == Team.getTeamCapacity();
+		final boolean IS_NOONE_PASSED = passed == 0;
+		final boolean IS_TEAM_FAILED = team.overcomeAsATeam(DIFFICULTY) == false;
+		if (IS_EVERYONE_PASSED) return "+Great success! Every team member did his excersizes.";
+		else if (IS_NOONE_PASSED || IS_TEAM_FAILED) return "-Failure! Team cant even warm up!";
 		else return String.format("+Teamwork saved the day! %d of %d team members couldn't warm up.", 
 												Team.getTeamCapacity()-passed, Team.getTeamCapacity());
 	}
@@ -58,8 +62,11 @@ public class Course {
 		if (team == null) return "-404 team not found";
 		final int DIFFICULTY = 50;
 		int passed = team.overcomeOneByOne(DIFFICULTY);
-		if (passed == Team.getTeamCapacity()) return "+Great success! Every team member ate his breakfast.";
-		else if (passed == 0 || !team.overcomeAsATeam(DIFFICULTY)) return "-Failure! Team cant even eat!";
+		final boolean IS_EVERYONE_PASSED = passed == Team.getTeamCapacity();
+		final boolean IS_NOONE_PASSED = passed == 0;
+		final boolean IS_TEAM_FAILED = team.overcomeAsATeam(DIFFICULTY) == false;
+		if (IS_EVERYONE_PASSED) return "+Great success! Every team member ate his breakfast.";
+		else if (IS_NOONE_PASSED || IS_TEAM_FAILED) return "-Failure! Team cant even eat!";
 		else return String.format("+Teamwork saved the day! %d of %d team members couldn't eat a breakfast.", 
 												Team.getTeamCapacity()-passed, Team.getTeamCapacity());
 	}
@@ -67,8 +74,11 @@ public class Course {
 		if (team == null) return "-404 team not found";
 		final int DIFFICULTY = 80;
 		int passed = team.overcomeOneByOne(DIFFICULTY);
-		if (passed == Team.getTeamCapacity()) return "+Great success! Every team member has met some people.";
-		else if (passed == 0 || !team.overcomeAsATeam(DIFFICULTY)) return "-Failure! Team cant even talk to people!";
+		final boolean IS_EVERYONE_PASSED = passed == Team.getTeamCapacity();
+		final boolean IS_NOONE_PASSED = passed == 0;
+		final boolean IS_TEAM_FAILED = team.overcomeAsATeam(DIFFICULTY) == false;
+		if (IS_EVERYONE_PASSED) return "+Great success! Every team member has met some people.";
+		else if (IS_NOONE_PASSED || IS_TEAM_FAILED) return "-Failure! Team cant even talk to people!";
 		else return String.format("+Teamwork saved the day! %d of %d team members couldn't talk.", 
 												Team.getTeamCapacity()-passed, Team.getTeamCapacity());
 	}
@@ -76,8 +86,11 @@ public class Course {
 		if (team == null) return "-404 team not found";
 		final int DIFFICULTY = 105;
 		int passed = team.overcomeOneByOne(DIFFICULTY);
-		if (passed == Team.getTeamCapacity()) return "?!Cheater!!!";
-		else if (passed == 0 || !team.overcomeAsATeam(DIFFICULTY)) return "-Failure! This is a team of crybabies!";
+		final boolean IS_EVERYONE_PASSED = passed == Team.getTeamCapacity();
+		final boolean IS_NOONE_PASSED = passed == 0;
+		final boolean IS_TEAM_FAILED = team.overcomeAsATeam(DIFFICULTY) == false;
+		if (IS_EVERYONE_PASSED) return "?!Cheater!!!";
+		else if (IS_NOONE_PASSED || IS_TEAM_FAILED) return "-Failure! This is a team of crybabies!";
 		else return String.format("+Teamwork saved the day! %d of %d team members couldn't stop crying.", 
 												Team.getTeamCapacity()-passed, Team.getTeamCapacity());
 	}
