@@ -6,12 +6,12 @@ import java.util.List;
 public class Course {
 
 	public static void main(String[] args) {
+		// Preparing a team
 		Team theTeam = new Team();
 		System.out.println(theTeam);
-		
+		// Puth them on the test
 		Course.doIT(theTeam);
 		theTeam.showResults();
-
 	}
 	
 	public static void doIT(Team team) {
@@ -37,8 +37,11 @@ public class Course {
 		if (team == null) return "-404 team not found";
 		final int DIFFICULTY = 20;
 		int passed = team.overcomeOneByOne(DIFFICULTY);
-		if (passed == Team.getTeamCapacity()) return "+Great success! Every team member awaken in time.";
-		else if (passed == 0 || !team.overcomeAsATeam(DIFFICULTY)) return "-Failure! Team cant even wake up in time!";
+		final boolean IS_EVERYONE_PASSED = passed == Team.getTeamCapacity();
+		final boolean IS_NOONE_PASSED = passed == 0;
+		final boolean IS_TEAM_FAILED = team.overcomeAsATeam(DIFFICULTY) == false;
+		if (IS_EVERYONE_PASSED) return "+Great success! Every team member awaken in time.";
+		else if (IS_NOONE_PASSED || IS_TEAM_FAILED) return "-Failure! Team cant even wake up in time!";
 		else return String.format("+Teamwork saved the day! %d of %d team members couldn't wake up.", 
 												Team.getTeamCapacity()-passed, Team.getTeamCapacity());
 	}
