@@ -1,0 +1,82 @@
+package ru.stoliarenko.gb.lesson1.team;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Course {
+
+	public static void main(String[] args) {
+		Team theTeam = new Team();
+		System.out.println(theTeam);
+		
+		Course.doIT(theTeam);
+		theTeam.showResults();
+
+	}
+	
+	public static void doIT(Team team) {
+		StringBuffer teamResults = new StringBuffer("Lets see how they overcome life difficulties!\n");
+		
+		List<String> dids = new ArrayList<>();
+		dids.add(wakeUpEarly(team));
+		dids.add(doTheExcersizes(team));
+		dids.add(eatBreakfast(team));
+		dids.add(meetPeople(team));
+		dids.add(doNotCry(team));
+		
+		for (String string : dids) {
+			teamResults.append(string);
+			teamResults.append("\n");
+			if (string.startsWith("-")) break; 
+		}
+		
+		team.setResults(teamResults.toString());
+	}
+	
+	private static String wakeUpEarly(Team team) {
+		if (team == null) return "-404 team not found";
+		final int DIFFICULTY = 20;
+		int passed = team.overcomeOneByOne(DIFFICULTY);
+		if (passed == Team.getTeamCapacity()) return "+Great success! Every team member awaken in time.";
+		else if (passed == 0 || !team.overcomeAsATeam(DIFFICULTY)) return "-Failure! Team cant even wake up in time!";
+		else return String.format("+Teamwork saved the day! %d of %d team members couldn't wake up.", 
+												Team.getTeamCapacity()-passed, Team.getTeamCapacity());
+	}
+	private static String doTheExcersizes(Team team) {
+		if (team == null) return "-404 team not found";
+		final int DIFFICULTY = 35;
+		int passed = team.overcomeOneByOne(DIFFICULTY);
+		if (passed == Team.getTeamCapacity()) return "+Great success! Every team member did his excersizes.";
+		else if (passed == 0 || !team.overcomeAsATeam(DIFFICULTY)) return "-Failure! Team cant even warm up!";
+		else return String.format("+Teamwork saved the day! %d of %d team members couldn't warm up.", 
+												Team.getTeamCapacity()-passed, Team.getTeamCapacity());
+	}
+	private static String eatBreakfast(Team team) {
+		if (team == null) return "-404 team not found";
+		final int DIFFICULTY = 50;
+		int passed = team.overcomeOneByOne(DIFFICULTY);
+		if (passed == Team.getTeamCapacity()) return "+Great success! Every team member ate his breakfast.";
+		else if (passed == 0 || !team.overcomeAsATeam(DIFFICULTY)) return "-Failure! Team cant even eat!";
+		else return String.format("+Teamwork saved the day! %d of %d team members couldn't eat a breakfast.", 
+												Team.getTeamCapacity()-passed, Team.getTeamCapacity());
+	}
+	private static String meetPeople(Team team) {
+		if (team == null) return "-404 team not found";
+		final int DIFFICULTY = 80;
+		int passed = team.overcomeOneByOne(DIFFICULTY);
+		if (passed == Team.getTeamCapacity()) return "+Great success! Every team member has met some people.";
+		else if (passed == 0 || !team.overcomeAsATeam(DIFFICULTY)) return "-Failure! Team cant even talk to people!";
+		else return String.format("+Teamwork saved the day! %d of %d team members couldn't talk.", 
+												Team.getTeamCapacity()-passed, Team.getTeamCapacity());
+	}
+	private static String doNotCry(Team team) {
+		if (team == null) return "-404 team not found";
+		final int DIFFICULTY = 105;
+		int passed = team.overcomeOneByOne(DIFFICULTY);
+		if (passed == Team.getTeamCapacity()) return "?!Cheater!!!";
+		else if (passed == 0 || !team.overcomeAsATeam(DIFFICULTY)) return "-Failure! This is a team of crybabies!";
+		else return String.format("+Teamwork saved the day! %d of %d team members couldn't stop crying.", 
+												Team.getTeamCapacity()-passed, Team.getTeamCapacity());
+	}
+
+}
