@@ -20,31 +20,22 @@ public class InterfaceDemo {
 	}
 	
 	class Bird implements Talking{
-
 		@Override
 		public void talk() {
 			System.out.println("I'm a bird!");
-			
 		}
-		
 	}
 	class Dog implements Talking{
-
 		@Override
 		public void talk() {
 			System.out.println("I'm a dog!");
-			
 		}
-		
 	}
 	class Elephant implements Talking{
-
 		@Override
 		public void talk() {
 			System.out.println("I'm an elephant!");
-			
 		}
-		
 	}
 
 }
