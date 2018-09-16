@@ -41,7 +41,7 @@ public class LessonTwoHomework {
     Logger logger = Logger.getLogger("LoggingException");
     for (int row = 0; row < stringArray.length; row++) {
       for (int column = 0; column < stringArray[0].length; column++) {
-		try {
+        try {
           result += Integer.parseInt(stringArray[row][column]);
         } catch(NumberFormatException nfe) {
           if (ignoreInvalidData) logger.info(String.format("Invalid data at row[%d], column[%d]", row, column));
