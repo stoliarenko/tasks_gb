@@ -32,7 +32,7 @@ public class LessonTwoHomework {
     }
   }
   
-  private static int countSum(String[][] stringArray, boolean ignoreInvalidData) throws MyArrayException{
+  public static int countSum(String[][] stringArray, boolean ignoreInvalidData) throws MyArrayException{
     // Считаем отсутствие массива неправильным размером массива
     if (stringArray == null) throw new MyArraySizeException("404 array not found");
     if (stringArray.length != 4 || stringArray[0].length != 4) throw new MyArraySizeException();
