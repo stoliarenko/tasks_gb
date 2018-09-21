@@ -42,7 +42,6 @@ public class UniqueWordsCounterTest {
   }
   @Test
   public void containsAllWordsTest() {
-
     List<String> randomWords = Arrays.asList(UniqueWordsCounter.createWordsArray(100));
     assertTrue(randomWords.containsAll(Arrays.asList(WORDS)));
   }
