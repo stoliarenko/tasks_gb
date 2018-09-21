@@ -8,7 +8,7 @@ import java.util.*;
  */
 public class UniqueWordsCounterTest {
 /**
- * Tests for @method createWordsArray(int numberOfWords)
+ * Tests for @method createWordsArray(int numberOfWords).
  */
   public static final String[] WORDS = ("Collection Map List "
                                       + "Set Queue ArrayList "
@@ -47,7 +47,7 @@ public class UniqueWordsCounterTest {
     assertTrue(randomWords.containsAll(Arrays.asList(WORDS)));
   }
   /**
-   * Tests for @method getUniqueWords(String[] arrayOfWords)
+   * Tests for @method getUniqueWords(String[] arrayOfWords).
    */
   @Test(expected = NullPointerException.class)
   public void nullInputArrayTest() {

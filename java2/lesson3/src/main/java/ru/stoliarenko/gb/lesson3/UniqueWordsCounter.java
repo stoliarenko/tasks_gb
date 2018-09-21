@@ -3,7 +3,7 @@ package ru.stoliarenko.gb.lesson3;
 import java.util.*;
 
 /**
- * Домашнее задание java-2 урок-2 часть-1.
+ * Домашнее задание java-2 урок-3 часть-1.
  * 
  * <p>
  * Задание:
