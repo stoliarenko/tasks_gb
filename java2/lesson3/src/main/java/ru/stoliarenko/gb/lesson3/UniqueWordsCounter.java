@@ -27,7 +27,7 @@ public class UniqueWordsCounter {
     if (numberOfWords < 1) return new String[0];
     final String[] WORDS = ("Collection Map List "
                           + "Set Queue ArrayList "
-    	                  + "LinkedList SortedSet NavigableSet "
+                          + "LinkedList SortedSet NavigableSet "
                           + "HashMap BlockingQueue").split(" ");
     List<String> resultList = new LinkedList<>();
     Random random = new Random();
