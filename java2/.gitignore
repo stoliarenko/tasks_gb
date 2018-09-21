@@ -5,3 +5,6 @@
 *.class
 *.classpath
 *.prefs
+*.project
+*.log
+*.gitignore
