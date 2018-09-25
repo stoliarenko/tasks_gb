@@ -1,14 +1,17 @@
 package ru.stoliarenko.gb.lesson4;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.UIManager.LookAndFeelInfo;
 
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 
 
 public class App extends JFrame{
     private final static Color HIGH_RED = new Color(0xF0, 0x62, 0x92);
-    private final static Color LOW_RED = new Color(0xF4, 0x8F, 0xB1);//#F48FB1
+    private final static Color LOW_RED = new Color(0xBFF48FB1);//#F48FB1
     private final static Color HIGH_PURPLE = new Color(0x8E, 0x24, 0xAA);//#8E24AA
     private final static Color LOW_PURPLE = new Color(0xAB, 0x47, 0xBC);//#BA68C8
     private final int MAIN_WONDOW_SIZE = 100;
@@ -28,7 +31,7 @@ public class App extends JFrame{
         setContentPane(basePanel);
         
         
-        final JTextArea chatHistory = new JTextArea();
+        final JTextArea chatHistory = new MyTextArea();
         final JScrollPane chatHistoryScrollPane = new JScrollPane(chatHistory);
         final JTextArea users = new JTextArea();
         final JScrollPane usersScrollPane = new JScrollPane(users);
@@ -50,7 +53,8 @@ public class App extends JFrame{
         chatHistoryConstraints.gridy = 0;
         
         chatHistoryScrollPane.setBorder(null);
-        chatHistory.setBackground(LOW_RED);
+        chatHistoryScrollPane.setBackground(new Color(0xFfF48FB1, true));
+        chatHistory.setBackground(new Color(0xBfF48FB1, true));
         chatHistory.setForeground(LOW_PURPLE);
         chatHistory.setBorder(BorderFactory.createTitledBorder("Messages:"));
         chatHistory.setEditable(false);
@@ -107,7 +111,7 @@ public class App extends JFrame{
         final ImageIcon icon = new ImageIcon("src/resources/Pinkie Pie.png");
         setIconImage(icon.getImage());
         setTitle("Pony Chat");
-        setSize(1024, 768);setLocationRelativeTo(null);
+        setSize(924, 768);setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
     private void useNimbus() {
@@ -121,5 +125,24 @@ public class App extends JFrame{
         } catch (Exception e) {
             // If Nimbus is not available, you can set the GUI to another look and feel.
         }
+    }
+    private class MyTextArea extends JTextArea{
+        private Image img;
+        
+        public MyTextArea() {
+            super();
+            try{
+                img = ImageIO.read(new File("src/resources/big_pony_small.png"));
+            } catch(IOException e) {
+                System.out.println(e.toString());
+            }
+        }
+
+        @Override
+        protected void paintComponent(Graphics graphics) {
+            graphics.drawImage(img, 50, 50, null);
+            super.paintComponent(graphics);
+        }
+        
     }
 }
