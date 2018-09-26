@@ -46,8 +46,7 @@ public class App extends JFrame{
     
     private App() throws HeadlessException{
         useNimbus();
-        JPanel basePanel = setupBaseFrame();
-        setupFrames(basePanel);
+        setupFrames(setupBaseFrame());
     }
     
     /**
@@ -217,12 +216,10 @@ public class App extends JFrame{
                 System.out.println(e.toString());
             }
         }
-
         @Override
         protected void paintComponent(Graphics graphics) {
             graphics.drawImage(img, 50, 50, null);
             super.paintComponent(graphics);
         }
-        
     }
 }
