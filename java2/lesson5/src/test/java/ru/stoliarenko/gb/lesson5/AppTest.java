@@ -13,7 +13,6 @@ public class AppTest {
    public void sanityTest() throws NoSuchMethodException{
       final Method GOOD_POOL_METHOD = App.class.getDeclaredMethod("doGoodPoolMath", float[].class);
       final Method BAD_POOL_METHOD = App.class.getDeclaredMethod("doBadPoolMath", float[].class);
-      final Method NEUTRAL_POOL_METHOD = App.class.getDeclaredMethod("doNeutralPoolMath", float[].class);
       
       long startTime = System.currentTimeMillis();
       App.printCalculationsTime(GOOD_POOL_METHOD);
