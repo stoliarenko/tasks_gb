@@ -1,11 +1,12 @@
-package ru.stoliarenko.gb.lesson1;
+package ru.stoliarenko.gb.lesson4;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 /**
- * Unit test for simple App.
+ * Понятия не имею как писать тесты на графический интерфейс
+ * оставляю класс в качестве затычки для maven
  */
 public class AppTest 
     extends TestCase
