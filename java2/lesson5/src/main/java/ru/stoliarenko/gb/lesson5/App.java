@@ -64,7 +64,7 @@ public class App {
       }); 
       Thread secondThread = new Thread(()->{
          for (int i = 0; i < secondHalfArray.length; i++) {
-            secondHalfArray[i] = doMath(secondHalfArray[i], i);
+            secondHalfArray[i] = doMath(secondHalfArray[i], i+arrayHalf);
          }
       });
       firstThread.start();
