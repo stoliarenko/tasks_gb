@@ -24,24 +24,25 @@ import java.util.Arrays;
 @SuppressWarnings("unused")
 public class App {
    public static void main( String[] args )throws NoSuchMethodException{
-      final Method RAW_ARRAY_METHOD = App.class.getDeclaredMethod("doRawArrayMath", float[].class);
-      final Method DOUBLE_ARRAY_TWO_THREADS_METHOD = App.class.getDeclaredMethod("doDoubleArrayTwoThreadsMath", float[].class);
-      final Method TWO_THREADS_METHOD = App.class.getDeclaredMethod("doTwoThreadsMath", float[].class);
-      final Method GOOD_POOL_METHOD = App.class.getDeclaredMethod("doGoodPoolMath", float[].class);
-      final Method BAD_POOL_METHOD = App.class.getDeclaredMethod("doBadPoolMath", float[].class);
+      final Method rawArrayMethod = App.class.getDeclaredMethod("doRawArrayMath", float[].class);
+      final Method doubleArrayTwoThreadsMethod = App.class.getDeclaredMethod("doDoubleArrayTwoThreadsMath", float[].class);
+      final Method twoThreadsMethod = App.class.getDeclaredMethod("doTwoThreadsMath", float[].class);
+      final Method goodPoolMethod = App.class.getDeclaredMethod("doGoodPoolMath", float[].class);
+      final Method badPoolMethod = App.class.getDeclaredMethod("doBadPoolMath", float[].class);
       
-      printCalculationsTime(RAW_ARRAY_METHOD);
-      printCalculationsTime(DOUBLE_ARRAY_TWO_THREADS_METHOD);
-      printCalculationsTime(TWO_THREADS_METHOD);
-      printCalculationsTime(BAD_POOL_METHOD);
-      printCalculationsTime(GOOD_POOL_METHOD);
+      printCalculationsTime(rawArrayMethod);
+      printCalculationsTime(doubleArrayTwoThreadsMethod);
+      printCalculationsTime(twoThreadsMethod);
+      printCalculationsTime(badPoolMethod);
+      printCalculationsTime(goodPoolMethod);
    }
    /**
     * Методы, непосредственно выполняющие задачу:
     * 
     * 1. Обрабатывет весь массив в текущем потоке
     */
-   private static void doRawArrayMath(float[] bigArray) {
+   private static void doRawArrayMath(final float[] bigArray) {
+      if(bigArray == null) return;
       for (int i = 0; i < bigArray.length; i++) {
          bigArray[i] = doMath(bigArray[i], i);
       }
@@ -50,21 +51,22 @@ public class App {
     * 2. Обрабатывает массив в двух потоках с созданием вспомогательных массивов для каждого потока
     * @throws InterruptedException
     */
-   private static void doDoubleArrayTwoThreadsMath(float[] bigArray) throws InterruptedException{
+   private static void doDoubleArrayTwoThreadsMath(final float[] bigArray) throws InterruptedException{
+      if(bigArray == null) return;
       final int arraysHalf = bigArray.length/2;
       final float[] firstHalfArray = new float[arraysHalf];
       System.arraycopy(bigArray, 0, firstHalfArray, 0,  firstHalfArray.length);
       final float[] secondHalfArray = new float[bigArray.length - arraysHalf];
       System.arraycopy(bigArray, arraysHalf, secondHalfArray, 0, secondHalfArray.length);
       
-      Thread firstThread = new Thread(() -> {
+      final Thread firstThread = new Thread(() -> {
          for (int i = 0; i < firstHalfArray.length; i++) {
             firstHalfArray[i] = doMath(firstHalfArray[i], i);
          }
       }); 
-      Thread secondThread = new Thread(()->{
+      final Thread secondThread = new Thread(()->{
          for (int i = 0; i < secondHalfArray.length; i++) {
-            secondHalfArray[i] = doMath(secondHalfArray[i], i+arrayHalf);
+            secondHalfArray[i] = doMath(secondHalfArray[i], i+arraysHalf);
          }
       });
       firstThread.start();
@@ -79,14 +81,15 @@ public class App {
     * 3. Обрабатывает массив в двух потоках без создания вспомогательных массивов
     * @throws InterruptedException
     */
-   private static void doTwoThreadsMath(float[] bigArray) throws InterruptedException{
+   private static void doTwoThreadsMath(final float[] bigArray) throws InterruptedException{
+      if(bigArray == null) return;
       final int arraysHalf = bigArray.length/2;
-      Thread firstThread = new Thread(()->{
+      final Thread firstThread = new Thread(()->{
          for (int i = 0; i < arraysHalf; i++) {
             bigArray[i] = doMath(bigArray[i], i);
          }
       });
-      Thread secondThread = new Thread(()->{
+      final Thread secondThread = new Thread(()->{
          for (int i = arraysHalf; i < bigArray.length; i++) {
             bigArray[i] = doMath(bigArray[i], i);
          }
@@ -100,17 +103,24 @@ public class App {
     * 4. Обрабатывает массив в пуле с указанием числа процессоров КАК БЫЛО СКАЗАНО НА ЛЕКЦИИ.
     * @throws InterruptedException
     */
-   private static void doBadPoolMath(float[] bigArray) throws InterruptedException{
-      LoopHandler handler = new App().new LoopHandler(bigArray, Runtime.getRuntime().availableProcessors()-1);
-      handler.loopProcess();
+   private static void doBadPoolMath(final float[] bigArray) throws InterruptedException{
+      doPoolMath(bigArray, -1);
    }
    /**
     * 5. Обрабатывает массив в пуле с указанием числа процессоров как пишут в литературе.
     * @throws InterruptedException
     */
-   private static void doGoodPoolMath(float[] bigArray) throws InterruptedException{
-      LoopHandler handler = new App().new LoopHandler(bigArray, Runtime.getRuntime().availableProcessors()+1);
-      handler.loopProcess();
+   private static void doGoodPoolMath(final float[] bigArray) throws InterruptedException{
+      doPoolMath(bigArray, 1);
+   }
+   private static void doPoolMath(final float[] bigArray, int cpuShift) {
+      if(bigArray == null) return;
+      try {
+         LoopHandler handler = new App().new LoopHandler(bigArray, Runtime.getRuntime().availableProcessors()+cpuShift);
+         handler.loopProcess();
+      } catch (InterruptedException e) {
+         e.printStackTrace();
+      }
    }
    
    /**
@@ -122,6 +132,7 @@ public class App {
     * @param method
     */
    public static void printCalculationsTime(Method method) {
+      if(method == null) return;
       final float[] bigArray = new float[10*1000*1000];
       Arrays.fill(bigArray, 1f);
       
@@ -165,7 +176,7 @@ public class App {
       }
       private Thread lookupThreads[];
       private int startLoop, endLoop, curLoop, numThreads;
-      private LoopHandler(float[] bigArray, int threads) {
+      private LoopHandler(final float[] bigArray, int threads) {
          this.bigArray = bigArray;
          startLoop = curLoop = 0;
          endLoop = bigArray.length;
@@ -174,7 +185,7 @@ public class App {
       }
       private synchronized LoopRange loopGetRange() {
          if (curLoop >= endLoop) return null;
-         LoopRange result = new LoopRange();
+         final LoopRange result = new LoopRange();
          result.start = curLoop;
          curLoop += (endLoop-startLoop)/numThreads+1;
          result.end = (curLoop<endLoop) ? curLoop : endLoop;
