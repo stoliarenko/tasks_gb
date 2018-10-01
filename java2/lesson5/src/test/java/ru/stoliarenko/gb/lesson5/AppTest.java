@@ -11,16 +11,16 @@ import java.lang.reflect.Method;
 public class AppTest {
    @Test
    public void sanityTest() throws NoSuchMethodException{
-      final Method GOOD_POOL_METHOD = App.class.getDeclaredMethod("doGoodPoolMath", float[].class);
-      final Method BAD_POOL_METHOD = App.class.getDeclaredMethod("doBadPoolMath", float[].class);
+      final Method goodPoolMethod = App.class.getDeclaredMethod("doGoodPoolMath", float[].class);
+      final Method badPoolMethod = App.class.getDeclaredMethod("doBadPoolMath", float[].class);
       
       long startTime = System.currentTimeMillis();
-      App.printCalculationsTime(GOOD_POOL_METHOD);
+      App.printCalculationsTime(goodPoolMethod);
       long finishTime = System.currentTimeMillis();
       long goodMethodTime = finishTime - startTime;
       
       startTime = System.currentTimeMillis();
-      App.printCalculationsTime(BAD_POOL_METHOD);
+      App.printCalculationsTime(badPoolMethod);
       finishTime = System.currentTimeMillis();
       long badMethodTime = finishTime - startTime;
       

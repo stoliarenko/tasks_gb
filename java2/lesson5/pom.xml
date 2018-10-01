@@ -10,6 +10,13 @@
   <name>lesson5</name>
   <url>http://maven.apache.org</url>
 
+  <developers>
+    <developer>
+      <name>Stoliarenk Alexander</name>
+      <timezone>Russia/Moscow</timezone>
+    </developer>
+  </developers>
+
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
@@ -30,6 +37,7 @@
         <configuration>
           <source>10</source>
           <target>10</target>
+          <encoding>${project.build.sourceEncoding}</encoding>
         </configuration>
       </plugin>
       <plugin>
