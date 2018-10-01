@@ -23,18 +23,22 @@ import java.util.Arrays;
  */
 @SuppressWarnings("unused")
 public class App {
-   public static void main( String[] args )throws NoSuchMethodException{
-      final Method rawArrayMethod = App.class.getDeclaredMethod("doRawArrayMath", float[].class);
-      final Method doubleArrayTwoThreadsMethod = App.class.getDeclaredMethod("doDoubleArrayTwoThreadsMath", float[].class);
-      final Method twoThreadsMethod = App.class.getDeclaredMethod("doTwoThreadsMath", float[].class);
-      final Method goodPoolMethod = App.class.getDeclaredMethod("doGoodPoolMath", float[].class);
-      final Method badPoolMethod = App.class.getDeclaredMethod("doBadPoolMath", float[].class);
-      
-      printCalculationsTime(rawArrayMethod);
-      printCalculationsTime(doubleArrayTwoThreadsMethod);
-      printCalculationsTime(twoThreadsMethod);
-      printCalculationsTime(badPoolMethod);
-      printCalculationsTime(goodPoolMethod);
+   public static void main( String[] args ){
+      try {
+         final Method rawArrayMethod = App.class.getDeclaredMethod("doRawArrayMath", float[].class);
+         final Method doubleArrayTwoThreadsMethod = App.class.getDeclaredMethod("doDoubleArrayTwoThreadsMath", float[].class);
+         final Method twoThreadsMethod = App.class.getDeclaredMethod("doTwoThreadsMath", float[].class);
+         final Method goodPoolMethod = App.class.getDeclaredMethod("doGoodPoolMath", float[].class);
+         final Method badPoolMethod = App.class.getDeclaredMethod("doBadPoolMath", float[].class);
+         
+         printCalculationsTime(rawArrayMethod);
+         printCalculationsTime(doubleArrayTwoThreadsMethod);
+         printCalculationsTime(twoThreadsMethod);
+         printCalculationsTime(badPoolMethod);
+         printCalculationsTime(goodPoolMethod);
+      } catch (NoSuchMethodException e) {
+         e.printStackTrace();
+      }
    }
    /**
     * Методы, непосредственно выполняющие задачу:
@@ -137,7 +141,9 @@ public class App {
       Arrays.fill(bigArray, 1f);
       
       final long startTime = System.currentTimeMillis();
-      try {method.invoke(null, bigArray);} catch (Exception e) {e.printStackTrace();}
+      try {
+         method.invoke(null, bigArray);
+      } catch (Exception e) {e.printStackTrace();}
       final long finishTime = System.currentTimeMillis();
       
       printResults(method.getName().substring(2), startTime, finishTime);
