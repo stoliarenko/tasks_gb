@@ -7,6 +7,12 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.SocketAddress;
 
+/**
+ * Разделяет и синхронизирует входящий и исходящий потоки
+ * а, так же оборачивает их в объектные потоки
+ * 
+ * @author Stoliarenko Alexander
+ */
 public class Connection implements Closeable {
     private final Socket socket;
     private final ObjectInputStream in;
@@ -28,10 +34,6 @@ public class Connection implements Closeable {
         synchronized(in){
             return (Message)in.readObject();
         }
-    }
-
-    public SocketAddress getRemoteSocketAddress(){
-        return socket.getRemoteSocketAddress();
     }
 
     public void close() throws IOException{

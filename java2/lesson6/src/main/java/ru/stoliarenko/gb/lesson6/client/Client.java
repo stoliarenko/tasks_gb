@@ -3,19 +3,29 @@ package ru.stoliarenko.gb.lesson6.client;
 import java.io.IOException;
 import java.net.Socket;
 
+import ru.stoliarenko.gb.lesson6.PonyChatClient;
 import ru.stoliarenko.gb.lesson6.Configuration;
 import ru.stoliarenko.gb.lesson6.Connection;
 import ru.stoliarenko.gb.lesson6.Message;
 import ru.stoliarenko.gb.lesson6.MessageType;
 import ru.stoliarenko.gb.lesson6.User;
-
+/**
+ * Клиентская часть чата - обеспечивает передачу,
+ * прием и обработку сообщений
+ * 
+ * @author Stoliarenko Alexander
+ */
 public class Client extends Thread{
+    protected  User user;
     protected Connection connection;
+    protected final PonyChatClient view;
     protected volatile boolean isConnected = false;
-    public static void main(String[] args) {
-        Client client = new Client();
-        client.run();
+
+    public Client(PonyChatClient view) {
+        this.view = view;
     }
+    //Отдельный поток нужен в случае работы с консолью, где в нем ожидается ввод.
+    //Для GUI не используется
     @Override
     public void run() {
         messageReader reader = new messageReader();
@@ -31,12 +41,19 @@ public class Client extends Thread{
             return;
         }
         ClientMessageHelper.writeMessage(isConnected ? "Connection established." : "No connection.");
-        while(isConnected) {
-            String userInput = ClientMessageHelper.readMessage();
-            if ("quit".equals(userInput)) isConnected = false;
-            else sendMessage(userInput);
-        }
+        //Блок для работы с консолью, если понадобится - снять комментарий.
+//        while(isConnected) {
+//            String userInput = ClientMessageHelper.readMessage();
+//            if ("quit".equals(userInput)) isConnected = false;
+//            else sendMessage(userInput);
+//        }
     }
+    /**
+     * Вспомогательный класс выполняет всю работу, 
+     * пока внешний класс делает вид что принимает сообщения из консоли
+     * 
+     * @author Stoliarenko Alexander
+     */
     private class messageReader extends Thread{
         @Override
         public void run() {
@@ -45,62 +62,96 @@ public class Client extends Thread{
                 int serverPort = Configuration.port;
                 Socket socket = new Socket(serverAddress, serverPort);
                 connection = new Connection(socket);
-                handshake(connection);
-                recieveMessages(connection);
+                registerUser(connection);
+                receiveMessages(connection);
             } catch (Exception e) {
-                notifyConnectionStatusChanged(false);
+                notifyConnectionStatusChanged(false);//нужно для прекращения работы потоков при работе с консолью
             }
         }
-        protected void handshake(Connection connection) throws Exception{
+        /**
+         * Создает пользователя и регистрирует его на сервере
+         * 
+         * на данном этапе GUI не готов принимать имя пользователя и он генерируется автоматически
+         * @param connection - соединение с сервером
+         */
+        protected void registerUser(Connection connection) throws Exception{
+            User createdUser = null;
             while(true) {
                 Message serverMessage = connection.receive();
                 if(serverMessage.getType() == MessageType.NAME_REQUEST) {
-                    Message usernameMessage = new Message(MessageType.USER_NAME, ClientMessageHelper.getUser().toString());
+                    createdUser = ClientMessageHelper.getUser();
+                    Message usernameMessage = new Message(MessageType.USER_NAME, createdUser.toString());
                     connection.send(usernameMessage);
                 }else if(serverMessage.getType() == MessageType.NAME_ACCEPTED) {
                     notifyConnectionStatusChanged(true);
                     ClientMessageHelper.writeMessage("Connected!");
+                    user = createdUser;
+                    view.setTitle("Pony Chat - user: " + createdUser.toString());
                     return;
                 }else throw new IOException("Unexpected message");
             }
         }
-        // Почему не работает через свич?!!!
-        protected void recieveMessages(Connection connection) throws Exception{
+        /**
+         * Принимает сообщения от пользователя и обрабатывает в соответствии с типом
+         * 
+         * @param connection - соединение с сервером
+         */
+        // Почему-то не работает через свич?!!!
+        protected void receiveMessages(Connection connection) throws Exception{
+            //Здесь будет управляющая конструкция для отключения по нажатию кнопки TODO
             while(true) {
                 Message serverMessage = connection.receive();
-                if(serverMessage.getType() == MessageType.TEXT) {
-                    ClientMessageHelper.writeMessage(serverMessage.getText());
-                }else if(serverMessage.getType() == MessageType.USER_CONNECTED) {
-                    ClientMessageHelper.writeMessage("User connected: " + serverMessage.getText());
-                }else if(serverMessage.getType() == MessageType.USER_DISCONNECTED) {
-                    ClientMessageHelper.writeMessage("User disconnected: " + serverMessage.getText());
-                }else throw new IOException("Unexpected message");
+                if (serverMessage.getType() == MessageType.TEXT) {
+                    showIncomingMessage(serverMessage.getText());
+                } else if (serverMessage.getType() == MessageType.USER_CONNECTED) {
+                    addUser(serverMessage.getText());
+                } else if (serverMessage.getType() == MessageType.USER_DISCONNECTED) {
+                    deleteUser(serverMessage.getText());
+                } else
+                    throw new IOException("Unexpected message");
             }
         }
+        /**
+         * Отображает полученное текстовое сообщение
+         * @param text - текст сообщения
+         */
         protected void showIncomingMessage(String text) {
             ClientMessageHelper.writeMessage(text);
+            view.showMessage(text);
         }
-        protected void informUserAdded(String username) {
-            ClientMessageHelper.writeMessage("User connected: " + username.toString());
+        /**
+         * Обрабатывает добавление пользователя
+         * @param username - имя пользователя
+         */
+        protected void addUser(String username) {
+            if(username.equals(user.getName())) username = "(Я)"+ username;
+            ClientMessageHelper.writeMessage("User connected: " + username);
+            view.addUser(username);
         }
-        protected void informUserDeleted(String username) {
+        /**
+         * Обрабатывает удаление пользователя
+         * @param username - имя пользователя
+         */
+        protected void deleteUser(String username) {
             ClientMessageHelper.writeMessage("User disconnected: " + username.toString());
+            view.deleteUser(username);
         }
+        /**
+         * Обеспечивает завершение работы потоков при работе с консолью
+         * @param isConnected - статус соединения
+         */
         protected void notifyConnectionStatusChanged(boolean isConnected) {
             Client.this.isConnected = isConnected;
             synchronized(Client.this) {
-                Client.this.notifyAll();
+                Client.this.notify();
             }
         }
     }
-    
-    protected User getUser() {
-        return new User();
-    }
-    protected messageReader getMessageReader() {
-        return new messageReader();
-    }
-    protected void sendMessage(String text) {
+    /**
+     * Отправляет текстовое сообзение на сервер
+     * @param text - текст сообщения
+     */
+    public void sendMessage(String text) {
         Message message = new Message(MessageType.TEXT, text);
         try {
             connection.send(message);

@@ -1,5 +1,10 @@
 package ru.stoliarenko.gb.lesson6;
-
+/**
+ * Сущность пользователя - на данном этапе содержит одно поле
+ * Нужен для масштабирования
+ * 
+ * @author Stoliarenko Alexander
+ */
 public class User {
     private static volatile int unnamedUserCounter = 0;
     private String name;

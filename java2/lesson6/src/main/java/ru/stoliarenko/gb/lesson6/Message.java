@@ -7,8 +7,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 public class Message implements Serializable{
-    private @Getter MessageType type;
-    private @Getter String text;
+    private MessageType type;
+    private String text;
     
     public Message(MessageType type) {
         this.type = type;
@@ -23,5 +23,4 @@ public class Message implements Serializable{
     public String getText() {
         return text;
     }
-   
 }
