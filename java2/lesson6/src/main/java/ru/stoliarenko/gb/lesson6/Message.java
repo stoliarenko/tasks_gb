@@ -2,9 +2,6 @@ package ru.stoliarenko.gb.lesson6;
 
 import java.io.Serializable;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
 
 public class Message implements Serializable{
     private final MessageType type;
