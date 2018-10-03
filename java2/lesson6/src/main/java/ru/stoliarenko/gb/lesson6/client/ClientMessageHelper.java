@@ -7,7 +7,7 @@ import ru.stoliarenko.gb.lesson6.User;
  * 
  * @author Stoliarenko Alexander
  */
-public class ClientMessageHelper {
+public final class ClientMessageHelper {
     public static void writeMessage(String text) {
         System.out.println(text);
     }

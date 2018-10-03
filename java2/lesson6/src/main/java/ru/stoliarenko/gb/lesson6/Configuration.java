@@ -6,6 +6,6 @@ package ru.stoliarenko.gb.lesson6;
  * @author Stoliarenko Alexander
  */
 public class Configuration {
-   public static int port = 3036;
-   public static String address = "localhost";
+   public static final int PORT = 3036;
+   public static final String ADDRESS = "localhost";
 }

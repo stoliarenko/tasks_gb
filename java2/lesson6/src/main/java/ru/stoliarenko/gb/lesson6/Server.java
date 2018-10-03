@@ -14,18 +14,18 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author Stoliarenko Alexander
  */
 public class Server {
-    private static final Map<User, Connection> connections = new ConcurrentHashMap<>();
+    private static final Map<User, Connection> CONNECTIONS = new ConcurrentHashMap<>();
 
     public static void main(String[] args) {
         try {
             //Запуск сервера
-            ServerSocket sSocket = new ServerSocket(Configuration.port);
+            final ServerSocket sSocket = new ServerSocket(Configuration.PORT);
             ServerLogger.writeMessage("Server started.");
             //Пока сервер работает принимаем подключения и обрабатываем их
             //Сюда будут добавлены управляющие конструкции из GUI TODO
             while(true) {
                 try {
-                    ConnectionHandler handler = new ConnectionHandler(sSocket.accept());
+                    final ConnectionHandler handler = new ConnectionHandler(sSocket.accept());
                     handler.start();
                 } catch (Exception e) {
                     sSocket.close();
@@ -44,7 +44,7 @@ public class Server {
      * @author Stoliarenko Alexander
      */
     private static class ConnectionHandler extends Thread{
-        private Socket socket;
+        private final Socket socket;
         public ConnectionHandler(Socket socket) {
             this.socket = socket;
         }
@@ -52,10 +52,10 @@ public class Server {
         @Override
         public void run() {
             try {
-                Connection connection = new Connection(socket);
+                final Connection connection = new Connection(socket);
                 try {
                     //Узнаём кто подключился и заносим в список активных
-                    User user = getUser(connection);
+                    final User user = getUser(connection);
                     try {
                         //Отправляем свежеподключившемуся список тех, кто уже в сети
                         //и принимаем сообщения
@@ -67,7 +67,7 @@ public class Server {
                         } catch (IOException cantCloseException) {ServerLogger.writeMessage("Can not close connection with " + user);}
                     } finally {
                         //По окончании приема сообщений удаляем пользователя из списков и сообщаем всем об этом
-                        connections.remove(user);
+                        CONNECTIONS.remove(user);
                         broadcast(new Message(MessageType.USER_DISCONNECTED, user.toString()));
                         ServerLogger.writeMessage("User disconnected: " + user);
                     }
@@ -86,15 +86,16 @@ public class Server {
          * @param connection - соединение с новым пользователем
          * @return - созданный экземпляр нового пользователя.
          */
-        private User getUser(Connection connection) throws ClassNotFoundException, IOException{
+        private User getUser(final Connection connection) throws ClassNotFoundException, IOException{
+            if (connection == null) throw new IOException("null connection");
             while (true) {
-                Message nameRequest = new Message(MessageType.NAME_REQUEST);
+                final Message nameRequest = new Message(MessageType.NAME_REQUEST);
                 connection.send(nameRequest);
-                Message userResponce = connection.receive();
+                final Message userResponce = connection.receive();
                 if(userResponce == null || userResponce.getType() != MessageType.USER_NAME ) continue;
                 final User user = new User(userResponce.getText());
-                if(connections.containsKey(user)) continue;
-                connections.put(user, connection);
+                if(CONNECTIONS.containsKey(user)) continue;
+                CONNECTIONS.put(user, connection);
                 connection.send(new Message(MessageType.NAME_ACCEPTED));
                 broadcast(new Message(MessageType.USER_CONNECTED, user.toString()));
                 return user;
@@ -105,8 +106,8 @@ public class Server {
          * @param user - подключившийся пользователь
          * @param connection - соединение с подключившимся пользователем
          */
-        private void sendListOfUsers(User user, Connection connection) throws IOException{
-            for (User userInList : connections.keySet()) {
+        private void sendListOfUsers(final User user, final Connection connection) throws IOException{
+            for (User userInList : CONNECTIONS.keySet()) {
                 if(user == userInList) continue;
                 connection.send(new Message(MessageType.USER_CONNECTED, userInList.getName()));
             }
@@ -115,11 +116,11 @@ public class Server {
          * Принимает сообщения от пользователя
          * @param connection - соединение с пользователем
          */
-        private void recieveMessages(User user, Connection connection) throws ClassNotFoundException, IOException{
+        private void recieveMessages(final User user, final Connection connection) throws ClassNotFoundException, IOException{
             //Здесь будет управляюзая конструкция для иселючения из чата пользователя
             //по типу while(user.isNotKicked()) TODO
             while(true) {
-                Message recievedMessage = connection.receive();
+                final Message recievedMessage = connection.receive();
                 if(recievedMessage.getType() != MessageType.TEXT) {
                     ServerLogger.writeMessage("Incorrect type of message recieved from " + user);
                     continue;
@@ -132,8 +133,8 @@ public class Server {
      * Отправляет переданное сообщение всем активным участникам чата 
      * @param message
      */
-    private static void broadcast(Message message) {
-        for (Connection connection : connections.values()) {
+    private static void broadcast(final Message message) {
+        for (Connection connection : CONNECTIONS.values()) {
             try {
                 connection.send(message);
             } catch (IOException e) {

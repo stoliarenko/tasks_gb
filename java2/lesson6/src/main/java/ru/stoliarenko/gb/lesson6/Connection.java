@@ -18,13 +18,14 @@ public class Connection implements Closeable {
     private final ObjectInputStream in;
     private final ObjectOutputStream out;
 
-    public Connection(Socket socket) throws IOException {
+    public Connection(final Socket socket) throws IOException {
         this.socket = socket;
         this.out = new ObjectOutputStream(socket.getOutputStream());
         this.in = new ObjectInputStream(socket.getInputStream());
     }
 
-    public void send(Message message) throws IOException{
+    public void send(final Message message) throws IOException{
+        if(message == null) return;
         synchronized (out){
             out.writeObject(message);
         }

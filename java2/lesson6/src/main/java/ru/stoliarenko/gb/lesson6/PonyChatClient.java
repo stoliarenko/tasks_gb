@@ -20,7 +20,7 @@ import java.util.TreeSet;
  */
 
 public class PonyChatClient extends JFrame{
-    private Set<String> users = new TreeSet<>();
+    private final Set<String> users = new TreeSet<>();
     /**
      * Используемая цветовая схема
      */
@@ -33,14 +33,14 @@ public class PonyChatClient extends JFrame{
     private JButton enterButton;
     private JTextField inputField;
     
-    private final int MESSAGE_AREA_SIZE = 100;
-    private final int USERS_AREA_SIZE = (int)(MESSAGE_AREA_SIZE * 0.2);
+    private static final int MESSAGE_AREA_SIZE = 100;
+    private static final int USERS_AREA_SIZE = (int)(MESSAGE_AREA_SIZE * 0.2);
     
     public static void main( String[] args ) {
-        PonyChatClient app = new PonyChatClient();
-        Client client = new Client(app);
-        app.setActionListeners(client);
-        app.setVisible(true);
+        final PonyChatClient view = new PonyChatClient();
+        final Client client = new Client(view);
+        view.setActionListeners(client);
+        view.setVisible(true);
         client.run();//Да, именно run(), а не start().
 
     }
@@ -54,7 +54,7 @@ public class PonyChatClient extends JFrame{
      * Обновляет отображение списка пользователей в соответствии с полем users
      */
     private void updateUsers() {
-        StringBuffer sb = new StringBuffer();
+        final StringBuffer sb = new StringBuffer();
         for (String user : users) {
             sb.append(user);
             sb.append("\n");
@@ -65,7 +65,8 @@ public class PonyChatClient extends JFrame{
      * Добавляет пользователя из параметра в общий список
      * @param user
      */
-    public void addUser(String user) {
+    public void addUser(final String user) {
+        if(user == null) return;
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 if(user == null) return;
@@ -78,7 +79,8 @@ public class PonyChatClient extends JFrame{
      * Удаляет пользователя из параметра из общего списка
      * @param user
      */
-    public void deleteUser(String user) {
+    public void deleteUser(final String user) {
+        if(user == null) return;
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 if(user == null) return;
@@ -91,7 +93,8 @@ public class PonyChatClient extends JFrame{
      * Добавляет очередное сообщение в окно истории чата
      * @param text
      */
-    public void showMessage(String text) {
+    public void showMessage(final String text) {
+        if(text == null) return;
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 messagesArea.append(text + "\n");
@@ -102,7 +105,7 @@ public class PonyChatClient extends JFrame{
      * Связывает отображение и клиента
      * @param client
      */
-    public void setActionListeners(Client client) {
+    public void setActionListeners(final Client client) {
         inputField.addActionListener((event)->{
             System.out.println(inputField.getText());
             client.sendMessage(inputField.getText());
@@ -117,9 +120,9 @@ public class PonyChatClient extends JFrame{
      * @param mainPanel - базовая панель, должна иметь GridBagLayout
      * @return inputPanel - добавленное текстовое поле
      */
-    private JTextField createInputField(JPanel mainPanel) {
+    private JTextField createInputField(final JPanel mainPanel) {
         final JTextField inputField = new JTextField();
-        GridBagConstraints inputFieldConstraints = new GridBagConstraints();
+        final GridBagConstraints inputFieldConstraints = new GridBagConstraints();
         
         inputFieldConstraints.fill = GridBagConstraints.BOTH;
         inputFieldConstraints.gridwidth = MESSAGE_AREA_SIZE;
@@ -141,9 +144,9 @@ public class PonyChatClient extends JFrame{
      * @param mainPanel - базовая панель, должна иметь GridBagLayout
      * @return enterButton - добавленная кнопка ввода
      */
-    private JButton createEnterButton(JPanel mainPanel) {
+    private JButton createEnterButton(final JPanel mainPanel) {
         final JButton enterButton = new JButton("Enter", new ImageIcon("src/resources/Pinkie_Pie_small.png"));
-        GridBagConstraints enterButtonConstraints = new GridBagConstraints();
+        final GridBagConstraints enterButtonConstraints = new GridBagConstraints();
         
         enterButtonConstraints.fill = GridBagConstraints.BOTH;
         enterButtonConstraints.gridwidth = USERS_AREA_SIZE;
@@ -161,10 +164,10 @@ public class PonyChatClient extends JFrame{
      * @param mainPanel - базовая панель, должна иметь GridBagLayout
      * @return users - добавленная панель пользователей
      */
-    private JTextArea createUsersArea(JPanel mainPanel) {
+    private JTextArea createUsersArea(final JPanel mainPanel) {
         final JTextArea users = new JTextArea();
         final JScrollPane usersScrollPane = new JScrollPane(users);
-        GridBagConstraints usersConstraints = new GridBagConstraints();
+        final GridBagConstraints usersConstraints = new GridBagConstraints();
         
         usersConstraints.anchor = GridBagConstraints.LINE_END;
         usersConstraints.fill = GridBagConstraints.BOTH;
@@ -188,10 +191,10 @@ public class PonyChatClient extends JFrame{
      * @param mainPanel - базовая панель, должна иметь GridBagLayout
      * @return chatHistory - добавленное окно чата
      */
-    private JTextArea createMessagesArea(JPanel mainPanel) {
+    private JTextArea createMessagesArea(final JPanel mainPanel) {
         final JTextArea chatHistory = new MyTextArea();
         final JScrollPane chatHistoryScrollPane = new JScrollPane(chatHistory);
-        GridBagConstraints chatHistoryConstraints = new GridBagConstraints();
+        final GridBagConstraints chatHistoryConstraints = new GridBagConstraints();
         
         chatHistoryConstraints.anchor =  GridBagConstraints.FIRST_LINE_START;
         chatHistoryConstraints.fill = GridBagConstraints.BOTH;
@@ -233,7 +236,7 @@ public class PonyChatClient extends JFrame{
      * 
      * @param basePanel - панель контента основного окна
      */
-    private void setupFrames(JPanel basePanel) {
+    private void setupFrames(final JPanel basePanel) {
         this.messagesArea = createMessagesArea(basePanel);
         this.usersArea = createUsersArea(basePanel);
         this.inputField = createInputField(basePanel);
@@ -257,7 +260,7 @@ public class PonyChatClient extends JFrame{
     /**
      * Класс, необходимый для отображения фоновой картинки
      */
-    private class MyTextArea extends JTextArea{
+    private final class MyTextArea extends JTextArea{
         private Image img;
         
         public MyTextArea() {
@@ -269,7 +272,7 @@ public class PonyChatClient extends JFrame{
             }
         }
         @Override
-        protected void paintComponent(Graphics graphics) {
+        protected void paintComponent(final Graphics graphics) {
             graphics.drawImage(img, 50, 50, null);
             super.paintComponent(graphics);
         }

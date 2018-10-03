@@ -10,13 +10,13 @@ import ru.stoliarenko.gb.lesson6.Message;
 import ru.stoliarenko.gb.lesson6.MessageType;
 import ru.stoliarenko.gb.lesson6.User;
 /**
- * Клиентская часть чата - обеспечивает передачу,
- * прием и обработку сообщений
+ * Клиентская часть чата - базовый вариант - 
+ * обеспечивает передачу, прием и обработку сообщений
  * 
  * @author Stoliarenko Alexander
  */
 public class Client extends Thread{
-    protected  User user;
+    protected User user;
     protected Connection connection;
     protected final PonyChatClient view;
     protected volatile boolean isConnected = false;
@@ -28,7 +28,7 @@ public class Client extends Thread{
     //Для GUI не используется
     @Override
     public void run() {
-        messageReader reader = new messageReader();
+        final messageReader reader = new messageReader();
         reader.setDaemon(true);
         reader.start();
         try {
@@ -43,7 +43,7 @@ public class Client extends Thread{
         ClientMessageHelper.writeMessage(isConnected ? "Connection established." : "No connection.");
         //Блок для работы с консолью, если понадобится - снять комментарий.
 //        while(isConnected) {
-//            String userInput = ClientMessageHelper.readMessage();
+//            final String userInput = ClientMessageHelper.readMessage();
 //            if ("quit".equals(userInput)) isConnected = false;
 //            else sendMessage(userInput);
 //        }
@@ -58,9 +58,9 @@ public class Client extends Thread{
         @Override
         public void run() {
             try {
-                String serverAddress = Configuration.address; //TODO change this trash to properties file
-                int serverPort = Configuration.port;
-                Socket socket = new Socket(serverAddress, serverPort);
+                final String serverAddress = Configuration.ADDRESS; //TODO change this trash to properties file
+                final int serverPort = Configuration.PORT;
+                final Socket socket = new Socket(serverAddress, serverPort);
                 connection = new Connection(socket);
                 registerUser(connection);
                 receiveMessages(connection);
@@ -75,12 +75,13 @@ public class Client extends Thread{
          * @param connection - соединение с сервером
          */
         protected void registerUser(Connection connection) throws Exception{
+            if (connection == null) return;
             User createdUser = null;
             while(true) {
                 Message serverMessage = connection.receive();
                 if(serverMessage.getType() == MessageType.NAME_REQUEST) {
                     createdUser = ClientMessageHelper.getUser();
-                    Message usernameMessage = new Message(MessageType.USER_NAME, createdUser.toString());
+                    final Message usernameMessage = new Message(MessageType.USER_NAME, createdUser.toString());
                     connection.send(usernameMessage);
                 }else if(serverMessage.getType() == MessageType.NAME_ACCEPTED) {
                     notifyConnectionStatusChanged(true);
@@ -98,9 +99,10 @@ public class Client extends Thread{
          */
         // Почему-то не работает через свич?!!!
         protected void receiveMessages(Connection connection) throws Exception{
+            if (connection == null) return;
             //Здесь будет управляющая конструкция для отключения по нажатию кнопки TODO
             while(true) {
-                Message serverMessage = connection.receive();
+                final Message serverMessage = connection.receive();
                 if (serverMessage.getType() == MessageType.TEXT) {
                     showIncomingMessage(serverMessage.getText());
                 } else if (serverMessage.getType() == MessageType.USER_CONNECTED) {
@@ -124,6 +126,7 @@ public class Client extends Thread{
          * @param username - имя пользователя
          */
         protected void addUser(String username) {
+            if(username == null) return;
             if(username.equals(user.getName())) username = "(Я)"+ username;
             ClientMessageHelper.writeMessage("User connected: " + username);
             view.addUser(username);
@@ -133,6 +136,7 @@ public class Client extends Thread{
          * @param username - имя пользователя
          */
         protected void deleteUser(String username) {
+            if(username == null) return;
             ClientMessageHelper.writeMessage("User disconnected: " + username.toString());
             view.deleteUser(username);
         }
@@ -152,6 +156,7 @@ public class Client extends Thread{
      * @param text - текст сообщения
      */
     public void sendMessage(String text) {
+        if(text == null) return;
         Message message = new Message(MessageType.TEXT, text);
         try {
             connection.send(message);

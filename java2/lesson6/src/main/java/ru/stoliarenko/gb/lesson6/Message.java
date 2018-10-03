@@ -7,11 +7,12 @@ import lombok.Getter;
 import lombok.Setter;
 
 public class Message implements Serializable{
-    private MessageType type;
-    private String text;
+    private final MessageType type;
+    private final String text;
     
     public Message(MessageType type) {
         this.type = type;
+        this.text = null;
     }
     public Message(MessageType type, String text) {
         this.type = type;
