@@ -5,7 +5,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 /**
- * Unit test for simple App.
+ * Тест не реализован - понятия не имею как тестируются программы с GUI
  */
 public class AppTest 
     extends TestCase
