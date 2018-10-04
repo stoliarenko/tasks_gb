@@ -28,7 +28,7 @@ public class Client extends Thread{
     //Для GUI не используется
     @Override
     public void run() {
-        final messageReader reader = new messageReader();
+        final MessageReader reader = new messageReader();
         reader.setDaemon(true);
         reader.start();
         try {
@@ -54,7 +54,7 @@ public class Client extends Thread{
      * 
      * @author Stoliarenko Alexander
      */
-    private class messageReader extends Thread{
+    private class MessageReader extends Thread{
         @Override
         public void run() {
             try {
