@@ -5,7 +5,7 @@ package ru.stoliarenko.gb.lesson6;
  * 
  * @author Stoliarenko Alexander
  */
-public class Configuration {
+public final class Configuration {
    public static final int PORT = 3036;
    public static final String ADDRESS = "localhost";
 }
