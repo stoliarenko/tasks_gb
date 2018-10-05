@@ -165,7 +165,7 @@ public class Client extends Thread{
      */
     public void sendMessage(final String text) {
         if(text == null) return;
-        Message message = new Message(MessageType.TEXT, text);
+        final Message message = new Message(MessageType.TEXT, text);
         try {
             connection.send(message);
         } catch (IOException e) {
