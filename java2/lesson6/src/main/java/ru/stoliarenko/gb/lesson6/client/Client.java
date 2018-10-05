@@ -105,19 +105,24 @@ public class Client extends Thread{
                 final Message serverMessage = connection.receive();
                 if (serverMessage.getType() == MessageType.TEXT) {
                     showIncomingMessage(serverMessage.getText());
-                } else if (serverMessage.getType() == MessageType.USER_CONNECTED) {
+                    return;
+                }
+                if (serverMessage.getType() == MessageType.USER_CONNECTED) {
                     addUser(serverMessage.getText());
-                } else if (serverMessage.getType() == MessageType.USER_DISCONNECTED) {
+                    return;
+                } 
+                if (serverMessage.getType() == MessageType.USER_DISCONNECTED) {
                     deleteUser(serverMessage.getText());
-                } else
-                    throw new IOException("Unexpected message");
+                    return;
+                } 
+                throw new IOException("Unexpected message");
             }
         }
         /**
          * Отображает полученное текстовое сообщение
          * @param text - текст сообщения
          */
-        protected void showIncomingMessage(String text) {
+        protected void showIncomingMessage(final String text) {
             ClientMessageHelper.writeMessage(text);
             view.showMessage(text);
         }
@@ -125,7 +130,7 @@ public class Client extends Thread{
          * Обрабатывает добавление пользователя
          * @param username - имя пользователя
          */
-        protected void addUser(String username) {
+        protected void addUser(final String username) {
             if(username == null) return;
             if(username.equals(user.getName())) username = "(Я)"+ username;
             ClientMessageHelper.writeMessage("User connected: " + username);
@@ -155,7 +160,7 @@ public class Client extends Thread{
      * Отправляет текстовое сообзение на сервер
      * @param text - текст сообщения
      */
-    public void sendMessage(String text) {
+    public void sendMessage(final String text) {
         if(text == null) return;
         Message message = new Message(MessageType.TEXT, text);
         try {
