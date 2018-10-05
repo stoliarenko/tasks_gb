@@ -83,13 +83,16 @@ public class Client extends Thread{
                     createdUser = ClientMessageHelper.getUser();
                     final Message usernameMessage = new Message(MessageType.USER_NAME, createdUser.toString());
                     connection.send(usernameMessage);
-                }else if(serverMessage.getType() == MessageType.NAME_ACCEPTED) {
+                    return;
+                }
+                if(serverMessage.getType() == MessageType.NAME_ACCEPTED) {
                     notifyConnectionStatusChanged(true);
                     ClientMessageHelper.writeMessage("Connected!");
                     user = createdUser;
                     view.setTitle("Pony Chat - user: " + createdUser.toString());
                     return;
-                }else throw new IOException("Unexpected message");
+                }
+                throw new IOException("Unexpected message");
             }
         }
         /**
@@ -98,7 +101,7 @@ public class Client extends Thread{
          * @param connection - соединение с сервером
          */
         // Почему-то не работает через свич?!!!
-        protected void receiveMessages(Connection connection) throws Exception{
+        protected void receiveMessages(final Connection connection) throws Exception{
             if (connection == null) return;
             //Здесь будет управляющая конструкция для отключения по нажатию кнопки TODO
             while(true) {
