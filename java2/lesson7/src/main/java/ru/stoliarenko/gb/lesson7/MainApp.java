@@ -11,7 +11,7 @@ public class MainApp {
     public static void main(String[] args) {
         getApp(args).run();
     }
-    public static MainInterface getApp(String[] args){
+    public static Runnable getApp(String[] args){
         SeContainerInitializer.newInstance().addPackages(MainApp.class).initialize();
         
         if(args.length != 0) 
