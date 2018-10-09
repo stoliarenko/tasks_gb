@@ -7,33 +7,34 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.enterprise.context.ApplicationScoped;
 
+import ru.stoliarenko.gb.lesson7.model.Connection;
 import ru.stoliarenko.gb.lesson7.model.User;
 
 @ApplicationScoped
 public class ConnectionsService {
-    private final Map<Socket, User> connections = new ConcurrentHashMap<>();
+    private final Map<Connection, User> connections = new ConcurrentHashMap<>();
     
-    public void addConnection(final Socket socket) {
-        connections.put(socket, User.NULL_USER);
+    public void addConnection(final Connection connection) {
+        connections.put(connection, User.NULL_USER);
     }
-    public void removeConnection(final Socket socket) {
-        connections.remove(socket);
+    public void removeConnection(final Connection connection) {
+        connections.remove(connection);
     }
-    public void login(final Socket socket, final User user) {
-        connections.put(socket, user);
+    public void login(final Connection connection, final User user) {
+        connections.put(connection, user);
     }
-    public void logout(final Socket socket) {
-        connections.put(socket, User.NULL_USER);
+    public User logout(final Connection connection) {
+        return connections.put(connection, User.NULL_USER);
     }
-    public User getUser(final Socket socket) {
-        return connections.get(socket);
+    public User getUser(final Connection connection) {
+        return connections.get(connection);
     }
-    public Set<Socket> getConnections(){
+    public Set<Connection> getConnections(){
         return connections.keySet();
     }
-    public Socket getConnection(final User user) {
-        for (Socket socket : connections.keySet()) {
-            if(connections.get(socket).equals(user)) return socket;
+    public Connection getConnection(final User user) {
+        for (Connection connection : connections.keySet()) {
+            if(connections.get(connection).equals(user)) return connection;
         }
         return null;
     }

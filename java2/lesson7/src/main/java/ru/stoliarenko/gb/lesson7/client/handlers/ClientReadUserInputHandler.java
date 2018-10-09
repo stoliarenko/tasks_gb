@@ -9,22 +9,22 @@ import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
 import lombok.SneakyThrows;
-import ru.stoliarenko.gb.lesson7.client.events.ProcessUserInputEvent;
-import ru.stoliarenko.gb.lesson7.client.events.ReadUserInputEvent;
+import ru.stoliarenko.gb.lesson7.client.events.ClientParseUserInputEvent;
+import ru.stoliarenko.gb.lesson7.client.events.ClientReadUserInputEvent;
 import ru.stoliarenko.gb.lesson7.client.services.ClientLogger;
 
 @ApplicationScoped
 public final class ClientReadUserInputHandler {
     @Inject
-    private Event<ReadUserInputEvent> readInput;
+    private Event<ClientReadUserInputEvent> readInput;
     @Inject
-    private Event<ProcessUserInputEvent> processInput;
+    private Event<ClientParseUserInputEvent> processInput;
     
     @SneakyThrows
-    public void readInput(@Observes ReadUserInputEvent event) {
+    public void readInput(@Observes ClientReadUserInputEvent event) {
         final BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         final String userInput = reader.readLine();
-        processInput.fireAsync(new ProcessUserInputEvent(userInput));
-        readInput.fire(new ReadUserInputEvent());
+        processInput.fireAsync(new ClientParseUserInputEvent(userInput));
+        readInput.fire(new ClientReadUserInputEvent());
     }
 }

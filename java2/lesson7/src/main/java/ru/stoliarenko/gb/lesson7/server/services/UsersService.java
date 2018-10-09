@@ -31,16 +31,18 @@ public class UsersService {
         users.add(user);
         return true;
     }
-    public User getByLogin(final String user) {
+    public User getUser(final String userLogin, final String userPassword) {
         for (User registredUser : users) {
-            if (registredUser.getLogin().equals(user)) return registredUser;
+            if (registredUser.getLogin().equals(userLogin) && 
+                registredUser.getPassword().equals(userPassword)) 
+                return registredUser;
         }
-        return null;
+        return User.NULL_USER;
     }
     public User getByName(final String username) {
         for (User registredUser : users) {
             if (registredUser.getName().toLowerCase().equals(username.toLowerCase())) return registredUser;
         }
-        return null;
+        return User.NULL_USER;
     }
 }

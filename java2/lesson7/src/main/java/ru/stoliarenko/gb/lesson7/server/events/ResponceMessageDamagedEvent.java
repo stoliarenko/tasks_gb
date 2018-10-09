@@ -6,7 +6,6 @@ import ru.stoliarenko.gb.lesson7.model.Connection;
 
 @Getter
 @AllArgsConstructor
-public final class ServerMessageBroadcastEvent {
+public final class ResponceMessageDamagedEvent {
     private final Connection connection;
-    private final String text;
 }

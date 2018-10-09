@@ -12,10 +12,9 @@ import lombok.Setter;
 import lombok.SneakyThrows;
 import ru.stoliarenko.gb.lesson7.config.Configuration;
 import ru.stoliarenko.gb.lesson7.server.api.Server;
-import ru.stoliarenko.gb.lesson7.server.events.NewServerConnectionEvent;
+import ru.stoliarenko.gb.lesson7.server.events.ServerAcceptConnectionEvent;
 
 @Getter @Setter
-@NoArgsConstructor
 @ApplicationScoped
 public class ServerService implements Server {
     private ServerSocket serverSocket;
@@ -23,13 +22,13 @@ public class ServerService implements Server {
     @Inject
     private Configuration configuration;
     @Inject
-    Event<NewServerConnectionEvent> newConnectionEvent;
+    Event<ServerAcceptConnectionEvent> newConnectionEvent;
     
     @SneakyThrows
     public void run() {
         serverSocket = new ServerSocket(configuration.getPort());
         ServerLogger.writeMessage("Server started!");
-        newConnectionEvent.fire(new NewServerConnectionEvent());
+        newConnectionEvent.fire(new ServerAcceptConnectionEvent());
     }
 
 }
