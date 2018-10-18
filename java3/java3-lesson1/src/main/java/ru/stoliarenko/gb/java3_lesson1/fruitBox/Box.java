@@ -24,7 +24,7 @@ import java.util.ArrayList;
  * @param <E> - тип фрукта в коробке
  */
 public final class Box<E extends Fruit> {
-    private ArrayList<E> content = new ArrayList<E>();
+    private List<E> content = new ArrayList<E>();
     
     public boolean add(final E element) {
         return content.add(element);
