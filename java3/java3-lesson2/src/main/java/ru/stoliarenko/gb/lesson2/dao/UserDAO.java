@@ -11,7 +11,7 @@ import org.hibernate.cfg.Configuration;
 import ru.stoliarenko.gb.lesson2.entity.User;
 
 /**
- * Класс для работы получения пользователей из БД
+ * Класс для получения пользователей из БД
  * 
  * @author Stoliarenko Alexander
  */
