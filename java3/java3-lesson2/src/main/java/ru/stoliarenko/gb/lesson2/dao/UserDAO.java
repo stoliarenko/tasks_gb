@@ -87,6 +87,7 @@ public class UserDAO {
         Transaction tx = null;
         try {
             tx = session.beginTransaction();
+            //Есть ли преимущества у параметризованого запроса перед данным решением?
             session.createQuery(String.format("delete from User where name='%s'", name)).executeUpdate();
             tx.commit();
         } catch (HibernateException e) {
