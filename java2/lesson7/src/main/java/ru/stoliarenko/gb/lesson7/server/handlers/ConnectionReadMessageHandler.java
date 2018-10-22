@@ -1,18 +1,14 @@
 package ru.stoliarenko.gb.lesson7.server.handlers;
 
-import java.io.DataInputStream;
-import java.io.IOException;
-
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;
 import javax.enterprise.event.ObservesAsync;
 import javax.inject.Inject;
 
 import lombok.SneakyThrows;
-import ru.stoliarenko.gb.lesson7.server.events.ConnectionParseMessageEvent;
 import ru.stoliarenko.gb.lesson7.model.Connection;
+import ru.stoliarenko.gb.lesson7.server.events.ConnectionParseMessageEvent;
 import ru.stoliarenko.gb.lesson7.server.events.ConnectionReadMessageEvent;
-import ru.stoliarenko.gb.lesson7.server.events.ServerAwaitUserAuthorizationEvent;
 import ru.stoliarenko.gb.lesson7.server.services.ConnectionsService;
 import ru.stoliarenko.gb.lesson7.server.services.ServerLogger;
 
@@ -30,10 +26,10 @@ public final class ConnectionReadMessageHandler {
     public void readMessage(@ObservesAsync final ConnectionReadMessageEvent event) {
         try {
             final String textMessage = event.getConnection().receive();
-            ServerLogger.writeMessage("Received message:" + textMessage);
+            ServerLogger.writeMessage(String.format("Received message: + %s from: %s", textMessage, event.getConnection().toString()));
             
-            parseMessageEvent.fireAsync(new ConnectionParseMessageEvent(event.getConnection(), textMessage));
             readMessageEvent.fireAsync(new ConnectionReadMessageEvent(event.getConnection()));
+            parseMessageEvent.fire(new ConnectionParseMessageEvent(event.getConnection(), textMessage));
         } catch (Exception e) {
             final Connection connection = event.getConnection();
             connection.close();

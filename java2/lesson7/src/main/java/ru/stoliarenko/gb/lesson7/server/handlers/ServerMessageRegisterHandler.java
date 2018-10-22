@@ -2,7 +2,7 @@ package ru.stoliarenko.gb.lesson7.server.handlers;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;
-import javax.enterprise.event.ObservesAsync;
+import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
 import ru.stoliarenko.gb.lesson7.model.MessageUserRegister;
@@ -27,7 +27,7 @@ public final class ServerMessageRegisterHandler {
     @Inject
     private Event<ConnectionAuthorizationEvent> authorizationEvent;
     
-    public void register(@ObservesAsync final ServerMessageRegisterEvent event) {
+    public void register(@Observes final ServerMessageRegisterEvent event) {
         try {
             final MessageUserRegister message = converter.convertToMessage(event.getText(), MessageUserRegister.class);
             final User user = new User();
@@ -36,12 +36,12 @@ public final class ServerMessageRegisterHandler {
             user.setPassword(message.getPassword());
             final boolean registred = users.register(user);
             if (registred) {
-                registerResponceEvent.fireAsync(new ResponceMessageRegisterEvent(event.getConnection(), true, ""));
                 authorizationEvent.fireAsync(new ConnectionAuthorizationEvent(event.getConnection(), user));
+                registerResponceEvent.fire(new ResponceMessageRegisterEvent(event.getConnection(), true, ""));
             }
-            registerResponceEvent.fireAsync(new ResponceMessageRegisterEvent(event.getConnection(), false, "Invalid login or name"));
+            registerResponceEvent.fire(new ResponceMessageRegisterEvent(event.getConnection(), false, "Invalid login or name"));
         } catch (Exception e) {
-            messageDamagedEvent.fireAsync(new ResponceMessageDamagedEvent(event.getConnection()));
+            messageDamagedEvent.fire(new ResponceMessageDamagedEvent(event.getConnection()));
         } 
     }
 }

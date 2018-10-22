@@ -1,9 +1,7 @@
 package ru.stoliarenko.gb.lesson7.server.handlers;
 
-import java.io.DataOutputStream;
-
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.event.ObservesAsync;
+import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
 import lombok.SneakyThrows;
@@ -26,7 +24,7 @@ public final class ServerPrivateMessageHandler {
     private MessageConverter converter;
     
     @SneakyThrows
-    public void sendPrivateMessage(@ObservesAsync final ServerMessagePrivateEvent event) {
+    public void sendPrivateMessage(@Observes final ServerMessagePrivateEvent event) {
         ServerLogger.writeMessage("private msg handler..." + event.getText());
         final User sender = connections.getUser(event.getConnection());
         if(sender == null || sender == User.NULL_USER) {

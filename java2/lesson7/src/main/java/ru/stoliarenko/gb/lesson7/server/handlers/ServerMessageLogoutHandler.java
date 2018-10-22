@@ -2,7 +2,7 @@ package ru.stoliarenko.gb.lesson7.server.handlers;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;
-import javax.enterprise.event.ObservesAsync;
+import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
 import ru.stoliarenko.gb.lesson7.model.Connection;
@@ -23,7 +23,7 @@ public final class ServerMessageLogoutHandler {
     @Inject
     private MessageConverter converter;
 
-    public void logout(@ObservesAsync final ServerMessageLogoutEvent event) {
+    public void logout(@Observes final ServerMessageLogoutEvent event) {
         final User user = connections.logout(event.getConnection());
         if (user==null || user == User.NULL_USER) return;
         

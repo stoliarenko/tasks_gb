@@ -1,19 +1,19 @@
 package ru.stoliarenko.gb.lesson7.server.handlers;
 
-import java.net.Socket;
-
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;
-import javax.enterprise.event.ObservesAsync;
+import javax.enterprise.event.Observes;
 import javax.inject.Inject;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.SneakyThrows;
 import ru.stoliarenko.gb.lesson7.model.Connection;
 import ru.stoliarenko.gb.lesson7.model.Message;
-import ru.stoliarenko.gb.lesson7.server.events.*;
-import ru.stoliarenko.gb.lesson7.server.services.ServerLogger;
+import ru.stoliarenko.gb.lesson7.server.events.ConnectionParseMessageEvent;
+import ru.stoliarenko.gb.lesson7.server.events.ServerMessageBroadcastEvent;
+import ru.stoliarenko.gb.lesson7.server.events.ServerMessageLoginEvent;
+import ru.stoliarenko.gb.lesson7.server.events.ServerMessageLogoutEvent;
+import ru.stoliarenko.gb.lesson7.server.events.ServerMessagePrivateEvent;
+import ru.stoliarenko.gb.lesson7.server.events.ServerMessageRegisterEvent;
 import ru.stoliarenko.gb.lesson7.service.MessageConverter;
 
 @ApplicationScoped
@@ -32,7 +32,7 @@ public final class ConnectionParseMessageHandler {
     private MessageConverter converter;
     
     @SneakyThrows
-    public void parseMessage(@ObservesAsync final ConnectionParseMessageEvent event) {
+    public void parseMessage(@Observes final ConnectionParseMessageEvent event) {
         final Connection connection = event.getConnection();
         final String text = event.getText();
         
@@ -40,19 +40,19 @@ public final class ConnectionParseMessageHandler {
         
         switch (message.getType()) {
             case USER_LOGIN:
-                loginMessageEvent.fireAsync(new ServerMessageLoginEvent(connection, text));
+                loginMessageEvent.fire(new ServerMessageLoginEvent(connection, text));
                 break;
             case USER_LOGOUT:
-                logoutMessageEvent.fireAsync(new ServerMessageLogoutEvent(connection));
+                logoutMessageEvent.fire(new ServerMessageLogoutEvent(connection));
                 break;
             case USER_REGISTER:
-                registerMessageEvent.fireAsync(new ServerMessageRegisterEvent(connection, text));
+                registerMessageEvent.fire(new ServerMessageRegisterEvent(connection, text));
                 break;
             case MESSAGE_BROADCAST:
-                broadcastMessageEvent.fireAsync(new ServerMessageBroadcastEvent(connection, text));
+                broadcastMessageEvent.fire(new ServerMessageBroadcastEvent(connection, text));
                 break;
             case MESSAGE_PRIVATE:
-                privateMessageEvent.fireAsync(new ServerMessagePrivateEvent(connection, text));
+                privateMessageEvent.fire(new ServerMessagePrivateEvent(connection, text));
                 break;
         }
     }

@@ -1,7 +1,7 @@
 package ru.stoliarenko.gb.lesson7.server.handlers;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.event.ObservesAsync;
+import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
 import lombok.SneakyThrows;
@@ -21,10 +21,12 @@ public final class ServerMessageBroadcastHandler {
     private MessageConverter converter;
     
     @SneakyThrows
-    public void broadcast(@ObservesAsync final ServerMessageBroadcastEvent event) {
+    public void broadcast(@Observes final ServerMessageBroadcastEvent event) {
+        ServerLogger.writeMessage("broadcasting...");
         final User user = connections.getUser(event.getConnection());
         if(user == null || user == User.NULL_USER) {
             //TODO responce unauthorized
+            ServerLogger.writeMessage("Unauthorized!");
             return;
         }
         ServerLogger.writeMessage("broadcast event" + event.getText());

@@ -2,7 +2,7 @@ package ru.stoliarenko.gb.lesson7.server.handlers;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;
-import javax.enterprise.event.ObservesAsync;
+import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
 import ru.stoliarenko.gb.lesson7.model.MessageUserLogin;
@@ -11,7 +11,6 @@ import ru.stoliarenko.gb.lesson7.server.events.ConnectionAuthorizationEvent;
 import ru.stoliarenko.gb.lesson7.server.events.ResponceMessageDamagedEvent;
 import ru.stoliarenko.gb.lesson7.server.events.ResponceMessageLoginEvent;
 import ru.stoliarenko.gb.lesson7.server.events.ServerMessageLoginEvent;
-import ru.stoliarenko.gb.lesson7.server.services.ConnectionsService;
 import ru.stoliarenko.gb.lesson7.server.services.UsersService;
 import ru.stoliarenko.gb.lesson7.service.MessageConverter;
 
@@ -28,19 +27,19 @@ public final class ServerMessageLoginHandler {
     @Inject
     private Event<ConnectionAuthorizationEvent> authorizationEvent;
     
-    public void login(@ObservesAsync ServerMessageLoginEvent event) {
+    public void login(@Observes ServerMessageLoginEvent event) {
         try {
             final MessageUserLogin message = converter.convertToMessage(event.getText(), MessageUserLogin.class);
             final User user = users.getUser(message.getLogin(), message.getPassword());
             if (user == User.NULL_USER) {
                 final String cause = "Invalid login+password combination.";
-                loginResponceEvent.fireAsync(new ResponceMessageLoginEvent(event.getConnection(), false, cause));
+                loginResponceEvent.fire(new ResponceMessageLoginEvent(event.getConnection(), false, cause));
                 return;
             }
             authorizationEvent.fireAsync(new ConnectionAuthorizationEvent(event.getConnection(), user));
-            loginResponceEvent.fireAsync(new ResponceMessageLoginEvent(event.getConnection(), true, user.getName()));
+            loginResponceEvent.fire(new ResponceMessageLoginEvent(event.getConnection(), true, user.getName()));
         } catch (Exception e) {
-            messageDamagedEvent.fireAsync(new ResponceMessageDamagedEvent(event.getConnection()));
+            messageDamagedEvent.fire(new ResponceMessageDamagedEvent(event.getConnection()));
         }
     }
 }

@@ -46,4 +46,7 @@ public final class Connection implements Closeable{
         return socket.getRemoteSocketAddress();
     }
 
+    public String toString() {
+        return socket.getLocalSocketAddress().toString();
+    }
 }
