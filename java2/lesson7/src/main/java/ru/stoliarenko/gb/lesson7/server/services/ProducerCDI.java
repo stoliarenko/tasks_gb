@@ -1,8 +1,8 @@
 package ru.stoliarenko.gb.lesson7.server.services;
 
+import javax.inject.Inject;
 import javax.enterprise.inject.Disposes;
 import javax.enterprise.inject.Produces;
-import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 

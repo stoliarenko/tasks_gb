@@ -25,7 +25,7 @@ public final class ServerMessageBroadcastHandler {
         ServerLogger.writeMessage("broadcasting...");
         final User user = connections.getUser(event.getConnection());
         if(user == null || user == User.NULL_USER) {
-            //TODO responce unauthorized
+            //TODO response unauthorized
             ServerLogger.writeMessage("Unauthorized!");
             return;
         }
@@ -34,6 +34,8 @@ public final class ServerMessageBroadcastHandler {
         message.setText(user.getName() + ": " + message.getText());
         final String textMessage = converter.convertToString(message);
         for (Connection registredConnection : connections.getConnections()) {
+            final User adressat = connections.getUser(registredConnection);
+            if(adressat == null || adressat == User.NULL_USER) continue;
             registredConnection.send(textMessage);
         }
     }

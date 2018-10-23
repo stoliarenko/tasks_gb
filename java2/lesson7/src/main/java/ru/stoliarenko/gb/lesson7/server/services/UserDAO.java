@@ -10,8 +10,8 @@ import org.apache.deltaspike.jpa.api.transaction.Transactional;
 
 import ru.stoliarenko.gb.lesson7.model.User;
 
-@ApplicationScoped
 @Transactional
+@ApplicationScoped
 public class UserDAO {
     @Inject
     private EntityManager em;
@@ -24,5 +24,10 @@ public class UserDAO {
         List<User> users = em.createQuery("SELECT e FROM User e", User.class).getResultList();
         System.out.println(users.size());
         return em.createQuery("SELECT e FROM User e", User.class).getResultList();
+    }
+    
+    public void remove(String name) {
+        final User user = em.find(User.class, name);
+        em.remove(user);
     }
 }
