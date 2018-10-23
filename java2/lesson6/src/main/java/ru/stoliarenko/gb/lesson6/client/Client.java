@@ -28,7 +28,7 @@ public class Client extends Thread{
     //Для GUI не используется
     @Override
     public void run() {
-        final MessageReader reader = new messageReader();
+        final MessageReader reader = new MessageReader();
         reader.setDaemon(true);
         reader.start();
         try {
@@ -133,7 +133,7 @@ public class Client extends Thread{
          * Обрабатывает добавление пользователя
          * @param username - имя пользователя
          */
-        protected void addUser(final String username) {
+        protected void addUser(String username) {
             if(username == null) return;
             if(username.equals(user.getName())) username = "(Я)"+ username;
             ClientMessageHelper.writeMessage("User connected: " + username);

@@ -1,5 +1,8 @@
 /target/
 /.settings/
-.classpath
-.project
+/resources/
+
 *.zip
+*.project
+*.classpath
+
