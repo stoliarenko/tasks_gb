@@ -1,4 +1,8 @@
 /.metadata/
+/target/
+/.settings/
 /.recommenders/
-
-*.epf
+*.zip
+*.class
+*.project
+*.classpath
