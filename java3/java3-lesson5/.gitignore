@@ -1,0 +1,9 @@
+/.metadata/
+/target/
+/.settings/
+/.recommenders/
+
+*.zip
+*.class
+*.project
+*.classpath

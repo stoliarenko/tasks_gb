@@ -1,6 +1,7 @@
 package ru.stoliarenko.gb.java3_lesson1.fruitBox;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Домашняя работа java3-lesson1-3
