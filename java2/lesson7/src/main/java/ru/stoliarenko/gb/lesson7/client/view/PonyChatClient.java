@@ -1,15 +1,32 @@
 package ru.stoliarenko.gb.lesson7.client.view;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.imageio.ImageIO;
-import javax.swing.*;
-import javax.swing.UIManager.LookAndFeelInfo;
-
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.HeadlessException;
+import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
 import java.util.Set;
 import java.util.TreeSet;
+
+import javax.imageio.ImageIO;
+import javax.inject.Inject;
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
+
+import ru.stoliarenko.gb.lesson7.client.services.ClientService;
 
 /**
  * Pony Chat - Evolved.
@@ -19,6 +36,8 @@ import java.util.TreeSet;
  */
 
 public class PonyChatClient extends JFrame{
+    @Inject
+    private ClientService client;
     private final Set<String> users = new TreeSet<>();
     /**
      * Используемая цветовая схема
@@ -35,18 +54,11 @@ public class PonyChatClient extends JFrame{
     private static final int MESSAGE_AREA_SIZE = 100;
     private static final int USERS_AREA_SIZE = (int)(MESSAGE_AREA_SIZE * 0.2);
     
-    public static void main( String[] args ) {
-        final PonyChatClient view = new PonyChatClient();
-//        final Client client = new Client(view);
-//        view.setActionListeners(client);
-        view.setVisible(true);
-//        client.run();//Да, именно run(), а не start().
-
-    }
-    
     public PonyChatClient() throws HeadlessException{
         useNimbus();
         setupFrames(setupBaseFrame());
+        setActionListeners();
+        setVisible(true);
     }
     
     /**
@@ -104,14 +116,14 @@ public class PonyChatClient extends JFrame{
      * Связывает отображение и клиента
      * @param client
      */
-//    public void setActionListeners(final Client client) {
-//        inputField.addActionListener((event)->{
-//            System.out.println(inputField.getText());
-//            client.sendMessage(inputField.getText());
-//            inputField.setText("");
-//        });
-//        enterButton.addActionListener(inputField.getActionListeners()[0]);
-//    }
+    public void setActionListeners() {
+        inputField.addActionListener((event)->{
+            System.out.println(inputField.getText());
+            client.proceedInput(inputField.getText());
+            inputField.setText("");
+        });
+        enterButton.addActionListener(inputField.getActionListeners()[0]);
+    }
     
     /**
      * Добавляет на переданную панель поле для ввода текста

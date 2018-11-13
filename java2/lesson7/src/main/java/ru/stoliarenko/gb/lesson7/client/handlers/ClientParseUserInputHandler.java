@@ -46,6 +46,7 @@ public final class ClientParseUserInputHandler {
     
     @SneakyThrows
     public void processUserInput(@ObservesAsync ClientParseUserInputEvent event) {
+        ClientLogger.writeMessage("parsing " + event.getText());
         final String userInput = event.getText();
         if (userInput == null) return;
         

@@ -23,9 +23,9 @@ public final class ClientReadMessagesHandler {
     @SneakyThrows
     public void readMessages(@ObservesAsync ClientReadMessagesEvent event) {
         try {
-            final String message = client.getConnection().receive();
-            ClientLogger.writeMessage("Received message: " + message);
-            parseMessagesEvent.fireAsync(new ClientParseMessagesEvent(message));
+            final String textMessage = client.getConnection().receive();
+            ClientLogger.writeMessage("Received message: " + textMessage);
+            parseMessagesEvent.fireAsync(new ClientParseMessagesEvent(textMessage));
             readMessagesEvent.fireAsync(new ClientReadMessagesEvent());
         } catch (Exception e) {
             ClientLogger.writeMessage("Client disconnected.");
