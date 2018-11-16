@@ -30,7 +30,7 @@ public final class ServerAcceptConnectionHandler {
     @SneakyThrows
     public void createConnection(@Observes ServerAcceptConnectionEvent event) {
         final Connection newUserConnection = new Connection(server.getServerSocket().accept());
-        ServerLogger.writeMessage("Established connection with " + newUserConnection.getRemoteSocketAddress());
+        server.getLogger().info("Established connection with " + newUserConnection.getRemoteSocketAddress());
         connections.addConnection(newUserConnection);
         
         awaitAuthorizationEvent.fireAsync(new ServerAwaitUserAuthorizationEvent(newUserConnection));
