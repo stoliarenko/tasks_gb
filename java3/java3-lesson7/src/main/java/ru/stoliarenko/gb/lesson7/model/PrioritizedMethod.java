@@ -1,10 +1,14 @@
-package ru.stoliarenko.gb.lesson7;
+package ru.stoliarenko.gb.lesson7.model;
 
 import java.lang.reflect.Method;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+/**
+ * Класс обертки для метода, содержищий его приоритет от 1 до 10
+ * и специальные приоритеты для методов выполняемых первыми и последними
+ */
 public final class PrioritizedMethod implements Comparable<PrioritizedMethod>{
 
     private Method method;
