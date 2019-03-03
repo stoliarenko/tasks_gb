@@ -8,5 +8,22 @@
     <artifactId>algorythms</artifactId>
     <version>1.0</version>
 
+    <developers>
+        <developer>
+            <name>Alexander Stoliarenko</name>
+            <email>stolyarenkoas@gmail.com</email>
+            <timezone>Moscow/GMT+3</timezone>
+        </developer>
+    </developers>
+
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
 
 </project>
