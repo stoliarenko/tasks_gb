@@ -48,15 +48,15 @@ public class HanoiAndBagHelper {
         }
     }
 
-    public static List<byte[]> getTowerMoveAlgorithmRecursively(int numberOfDiscs) {
+    public static List<byte[]> getTowerMoveAlgorithmNonRecursively(int numberOfDiscs) {
         List<byte[]> result = new ArrayList<byte[]>();
         MyStack<Task> tasks = new MyStack<Task>();
         tasks.push(new Task(numberOfDiscs, (byte)1, (byte)3));
-        getSpecialTowerMoveAlgorithmRecursively(result, tasks);
+        getSpecialTowerMoveAlgorithmNonRecursively(result, tasks);
         return result;
     }
 
-    private static void getSpecialTowerMoveAlgorithmRecursively(List<byte[]> resultList, MyStack<Task> tasks) {
+    private static void getSpecialTowerMoveAlgorithmNonRecursively(List<byte[]> resultList, MyStack<Task> tasks) {
         while (tasks.getSize() > 0) {
             Task currentTask = tasks.pop();
             if (currentTask.numberOfDiscs == 1) {

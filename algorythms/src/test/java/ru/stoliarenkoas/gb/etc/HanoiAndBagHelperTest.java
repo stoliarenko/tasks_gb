@@ -33,10 +33,10 @@ public class HanoiAndBagHelperTest {
     @Test
     public void towerRecursiveTest() {
         for (int i = 1; i <= 10; i++) {
-            List<byte[]> recursiveList = HanoiAndBagHelper.getTowerMoveAlgorithmRecursively(i);
-            List<byte[]> nonRecursiveList = HanoiAndBagHelper.getTowerMoveAlgorithm(i);
+            List<byte[]> nonRecursiveList = HanoiAndBagHelper.getTowerMoveAlgorithmNonRecursively(i);
+            List<byte[]> recursiveList = HanoiAndBagHelper.getTowerMoveAlgorithm(i);
             for (int j = 0; j < recursiveList.size(); j++) {
-                Assert.assertTrue(Arrays.equals(nonRecursiveList.get(j), recursiveList.get(j)));
+                Assert.assertTrue(Arrays.equals(recursiveList.get(j), nonRecursiveList.get(j)));
             }
         }
     }
