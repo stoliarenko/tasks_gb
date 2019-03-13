@@ -7,7 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 
-public class TowerOfHanoiHelper {
+public class HanoiAndBagHelper {
 
     /**
      * Generates algorithm to solve Hanoi puzzle with N elements
@@ -80,7 +80,8 @@ public class TowerOfHanoiHelper {
         return lastBestItems[bagSize];
     }
 
-    public static List<BagItem> getBestItemsRecursively(int bagSize, List<BagItem> items) {
+    @SuppressWarnings("unchecked")
+    public static List<BagItem> getBestItemChoiceRecursively(int bagSize, List<BagItem> items) {
         int[] lastBest = new int[bagSize + 1];
         List<BagItem>[] lastBestItems = new List[bagSize + 1];
         for (int i = 0; i < bagSize + 1; i++) {
@@ -91,7 +92,9 @@ public class TowerOfHanoiHelper {
         return lastBestItems[bagSize];
     }
 
+    @SuppressWarnings("unchecked")
     private static void getBestItemChoiceRecursively(int bagSize, List<BagItem> items, int[] lastBest, List<BagItem>[] lastBestItems) {
+
         if (items.size() == 1) {
 
             int[] currentBest = new int[bagSize + 1];
@@ -122,12 +125,10 @@ public class TowerOfHanoiHelper {
             }
 
             return;
-
         }
 
         getBestItemChoiceRecursively(bagSize, items.subList(0, 1), lastBest, lastBestItems);
         getBestItemChoiceRecursively(bagSize, items.subList(1, items.size()), lastBest, lastBestItems);
-
     }
 
 }

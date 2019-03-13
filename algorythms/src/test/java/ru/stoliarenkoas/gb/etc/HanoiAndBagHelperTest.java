@@ -4,12 +4,11 @@ import org.junit.Assert;
 import org.junit.Test;
 import ru.stoliarenkoas.gb.etc.model.BagItem;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-public class TowerOfHanoiHelperTest {
+public class HanoiAndBagHelperTest {
     
     private final static List<byte[]> n5List = Arrays.asList(new byte[][]{
             {1, 3}, {1, 2}, {3, 2}, {1, 3},
@@ -24,7 +23,7 @@ public class TowerOfHanoiHelperTest {
 
     @Test
     public void test() {
-        List<byte[]> resultList = TowerOfHanoiHelper.getTowerMoveAlgorithm(5);
+        List<byte[]> resultList = HanoiAndBagHelper.getTowerMoveAlgorithm(5);
         Assert.assertEquals(resultList.size(), n5List.size());
         for (int i = 0; i < n5List.size(); i++) {
             Assert.assertTrue(Arrays.equals(n5List.get(i), resultList.get(i)));
@@ -40,15 +39,15 @@ public class TowerOfHanoiHelperTest {
         inList.add(BagItem.CANNED_FOOD);
         inList.add(BagItem.MATCHES);
 
-        List<BagItem> outList = TowerOfHanoiHelper.getBestItemChose(1, inList);
+        List<BagItem> outList = HanoiAndBagHelper.getBestItemChose(1, inList);
         Assert.assertEquals(1, outList.size());
         Assert.assertEquals(outList.get(0), BagItem.MATCHES);
 
-        outList = TowerOfHanoiHelper.getBestItemChose(3, inList);
+        outList = HanoiAndBagHelper.getBestItemChose(3, inList);
         Assert.assertEquals(2, outList.size());
         Assert.assertTrue(outList.containsAll(Arrays.asList(BagItem.MATCHES, BagItem.CANNED_FOOD)));
 
-        outList = TowerOfHanoiHelper.getBestItemChose(5, inList);
+        outList = HanoiAndBagHelper.getBestItemChose(5, inList);
         Assert.assertEquals(3, outList.size());
         Assert.assertTrue(outList.containsAll(Arrays.asList(BagItem.MATCHES, BagItem.CANNED_FOOD, BagItem.SOCKS)));
     }
@@ -62,15 +61,15 @@ public class TowerOfHanoiHelperTest {
         inList.add(BagItem.CANNED_FOOD);
         inList.add(BagItem.MATCHES);
 
-        List<BagItem> outList = TowerOfHanoiHelper.getBestItemsRecursively(1, inList);
+        List<BagItem> outList = HanoiAndBagHelper.getBestItemChoiceRecursively(1, inList);
         Assert.assertEquals(1, outList.size());
         Assert.assertEquals(outList.get(0), BagItem.MATCHES);
 
-        outList = TowerOfHanoiHelper.getBestItemsRecursively(3, inList);
+        outList = HanoiAndBagHelper.getBestItemChoiceRecursively(3, inList);
         Assert.assertEquals(2, outList.size());
         Assert.assertTrue(outList.containsAll(Arrays.asList(BagItem.MATCHES, BagItem.CANNED_FOOD)));
 
-        outList = TowerOfHanoiHelper.getBestItemsRecursively(5, inList);
+        outList = HanoiAndBagHelper.getBestItemChoiceRecursively(5, inList);
         Assert.assertEquals(3, outList.size());
         Assert.assertTrue(outList.containsAll(Arrays.asList(BagItem.MATCHES, BagItem.CANNED_FOOD, BagItem.SOCKS)));
     }
