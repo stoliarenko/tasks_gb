@@ -1,11 +1,11 @@
 package ru.stoliarenkoas.gb.etc;
 
-public class Recursion {
+public class Pow {
 
     /**
      * Method is raising number to the given power
      */
-    public static double pow(int number, int power) {
+    public static double pow(double number, int power) {
         if(power == 0) return 1;
         if(number == 0) return 0;
 
@@ -28,7 +28,7 @@ public class Recursion {
     /**
      * Method is raising number to the given power using recursion
      */
-    public static double recPow(double number, double power) {
+    public static double recPow(double number, int power) {
         if(power == 0) return 1;
         if(number == 0) return 0;
 
