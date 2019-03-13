@@ -1,6 +1,7 @@
 package ru.stoliarenkoas.gb.etc;
 
 import ru.stoliarenkoas.gb.etc.model.BagItem;
+import ru.stoliarenkoas.gb.structures.MyStack;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -33,6 +34,41 @@ public class HanoiAndBagHelper {
         getSpecialTowerMoveAlgorithm(numberOfDiscs - 1, from, unusedPosition, resultList);
         getSpecialTowerMoveAlgorithm(1, from, to, resultList);
         getSpecialTowerMoveAlgorithm(numberOfDiscs - 1, unusedPosition, to, resultList);
+    }
+
+    private static class Task {
+        int numberOfDiscs;
+        byte from;
+        byte to;
+
+        Task(int numberOfDiscs, byte from, byte to) {
+            this.numberOfDiscs = numberOfDiscs;
+            this.from = from;
+            this.to = to;
+        }
+    }
+
+    public static List<byte[]> getTowerMoveAlgorithmRecursively(int numberOfDiscs) {
+        List<byte[]> result = new ArrayList<byte[]>();
+        MyStack<Task> tasks = new MyStack<Task>();
+        tasks.push(new Task(numberOfDiscs, (byte)1, (byte)3));
+        getSpecialTowerMoveAlgorithmRecursively(result, tasks);
+        return result;
+    }
+
+    private static void getSpecialTowerMoveAlgorithmRecursively(List<byte[]> resultList, MyStack<Task> tasks) {
+        while (tasks.getSize() > 0) {
+            Task currentTask = tasks.pop();
+            if (currentTask.numberOfDiscs == 1) {
+                resultList.add(new byte[]{currentTask.from, currentTask.to});
+                System.out.printf("Move disc from %d, to %d.%n", currentTask.from, currentTask.to);
+                continue;
+            }
+            byte unusedPin = (byte) (6 - currentTask.from - currentTask.to);
+            tasks.push(new Task(currentTask.numberOfDiscs - 1, unusedPin, currentTask.to));
+            tasks.push(new Task(1, currentTask.from, currentTask.to));
+            tasks.push(new Task(currentTask.numberOfDiscs - 1, currentTask.from, unusedPin));
+        }
     }
 
 

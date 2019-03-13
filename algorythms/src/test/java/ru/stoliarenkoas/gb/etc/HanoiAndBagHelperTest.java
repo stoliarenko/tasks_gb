@@ -22,11 +22,22 @@ public class HanoiAndBagHelperTest {
     });
 
     @Test
-    public void test() {
+    public void towerTest() {
         List<byte[]> resultList = HanoiAndBagHelper.getTowerMoveAlgorithm(5);
         Assert.assertEquals(resultList.size(), n5List.size());
         for (int i = 0; i < n5List.size(); i++) {
             Assert.assertTrue(Arrays.equals(n5List.get(i), resultList.get(i)));
+        }
+    }
+
+    @Test
+    public void towerRecursiveTest() {
+        for (int i = 1; i <= 10; i++) {
+            List<byte[]> recursiveList = HanoiAndBagHelper.getTowerMoveAlgorithmRecursively(i);
+            List<byte[]> nonRecursiveList = HanoiAndBagHelper.getTowerMoveAlgorithm(i);
+            for (int j = 0; j < recursiveList.size(); j++) {
+                Assert.assertTrue(Arrays.equals(nonRecursiveList.get(j), recursiveList.get(j)));
+            }
         }
     }
 
