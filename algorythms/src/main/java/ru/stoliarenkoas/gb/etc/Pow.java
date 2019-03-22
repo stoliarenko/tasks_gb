@@ -12,15 +12,11 @@ public class Pow {
         boolean isNegative = power < 0;
         if (isNegative) power = -power;
 
-        double result = isNegative ? 1d / number : number;
-        while(power > 1) {
-            result = isNegative ? result / number : result * number;
-            if (power % 2 == 0) {
-                power /= 2;
-                number *= number;
-            } else {
-                power--;
-            }
+        double result = 1;
+        while(power > 0) {
+            if (power % 2 != 0) result = isNegative ? result / number : result * number;
+            power = power >> 1;
+            number *= number;
         }
         return result;
     }
