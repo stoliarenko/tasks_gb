@@ -26,7 +26,7 @@ public class MyGraph {
     }
 
     private boolean isOutOfBounds(int value) {
-        return value >= adjEdjes.length && value < 0;
+        return  value < 0 || value >= adjEdjes.length;
     }
 
     public void addEdge(int e1, int e2){
