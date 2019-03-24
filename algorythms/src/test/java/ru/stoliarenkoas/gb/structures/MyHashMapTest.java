@@ -6,20 +6,36 @@ import static org.junit.Assert.*;
 public class MyHashMapTest {
 
     @Test
-    public void linearProbingMapTest() {
+    public void probingMapTest() {
         final int initialSize = 8;
-        final MyHashMap<String, String> map = new MyLinearProbbingHashMap<String, String>(initialSize);
+        final MyHashMap<String, String> map = new MyProbingHashMap<String, String>(initialSize);
         final String[] strings = new String[initialSize * 2];
+
+        //initialize keys
+        for (int i = 0; i < strings.length; i++) {
+            strings[i] = String.valueOf(i);
+        }
+
+        testMap(map, strings);
+    }
+
+    @Test
+    public void chainingMapTest() {
+        final int initialSize = 8;
+        final MyHashMap<String, String> map = new MyChainingHashMap<String, String>(initialSize);
+        final String[] strings = new String[initialSize * 2];
+
+        //initialize keys
+        for (int i = 0; i < strings.length; i++) {
+            strings[i] = String.valueOf(i);
+        }
 
         testMap(map, strings);
     }
 
     private void testMap(MyHashMap<String, String> map, String[] strings) {
         assertTrue(map.isEmpty());
-        //initialize keys
-        for (int i = 0; i < strings.length; i++) {
-            strings[i] = String.valueOf(i);
-        }
+
         //fill map
         for (int i = 0; i < strings.length; i++) {
             assertEquals(i, map.size());
@@ -35,7 +51,7 @@ public class MyHashMapTest {
         }
         //replace values
         for (int i = 0; i < strings.length; i++) {
-            assertEquals(16, map.size());
+            assertEquals(strings.length, map.size());
             map.put(strings[i], String.valueOf(i*12));
         }
         //check values
@@ -55,7 +71,7 @@ public class MyHashMapTest {
 
     @Test(expected=IllegalArgumentException.class)
     public void negativeSizeTest() {
-        MyLinearProbbingHashMap<Integer, String> map = new MyLinearProbbingHashMap<Integer, String>(-8);
+        MyHashMap<Integer, String> map = new MyProbingHashMap<Integer, String>(-8);
     }
 
 }

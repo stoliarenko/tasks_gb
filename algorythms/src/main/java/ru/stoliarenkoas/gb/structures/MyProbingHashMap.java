@@ -3,7 +3,7 @@ package ru.stoliarenkoas.gb.structures;
 import com.sun.istack.internal.NotNull;
 
 @SuppressWarnings("unchecked")
-public class MyLinearProbbingHashMap<K, V> implements MyHashMap<K, V> {
+public class MyProbingHashMap<K, V> implements MyHashMap<K, V> {
     private Object[] array;
     private int size = 0;
 
@@ -17,13 +17,13 @@ public class MyLinearProbbingHashMap<K, V> implements MyHashMap<K, V> {
         }
     }
 
-    public MyLinearProbbingHashMap(int initSize) {
+    public MyProbingHashMap(int initSize) {
         if (initSize < 0) throw new IllegalArgumentException("Size cant be negative");
         if (initSize < 8) initSize = 8;
         this.array = new Object[initSize];
     }
 
-    public MyLinearProbbingHashMap() {
+    public MyProbingHashMap() {
         this(16);
     }
 
