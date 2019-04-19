@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">MoneyApp</string>
+    <string name="field_type_hint">TYPE</string>
+    <string name="field_price_hint">PRICE</string>
+    <string name="field_description_hint">DESCRIPTION</string>
+    <string name="button_add_text">ADD</string>
+</resources>
