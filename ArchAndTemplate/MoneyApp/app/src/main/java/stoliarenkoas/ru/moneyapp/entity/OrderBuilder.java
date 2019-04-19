@@ -6,9 +6,9 @@ import android.support.annotation.Nullable;
 public class OrderBuilder {
 
     @NonNull
-    private final Order order = new Order(System.currentTimeMillis());
+    private final Order order = new Order();
 
-    public OrderBuilder setTime(long time) {
+    private OrderBuilder setTime(long time) {
         order.setTime(time);
         return this;
     }
@@ -37,6 +37,7 @@ public class OrderBuilder {
     }
 
     public Order makeOrder() {
+        setTime(System.currentTimeMillis());
         return order;
     }
 

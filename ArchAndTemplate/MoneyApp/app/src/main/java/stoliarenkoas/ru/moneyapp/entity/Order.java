@@ -12,6 +12,6 @@ public class Order {
     private String description;
     private double price;
 
-    Order(long time){ this.time = time; }
+    Order(){}
 
 }
