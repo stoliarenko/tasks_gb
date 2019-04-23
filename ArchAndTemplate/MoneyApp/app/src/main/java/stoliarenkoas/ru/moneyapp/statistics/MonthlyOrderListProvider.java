@@ -21,6 +21,7 @@ public class MonthlyOrderListProvider extends AbstractOrderListProvider {
     @Override
     public List<Order> getOrderList() {
         if (orderRepisitory == null) return orderList;
+        orderList.clear();
         @NonNull final Collection<Order> allOrders = orderRepisitory.findAll();
         final long currentTime = System.currentTimeMillis();
         for (@Nullable final Order order : allOrders) {
@@ -29,4 +30,5 @@ public class MonthlyOrderListProvider extends AbstractOrderListProvider {
         }
         return orderList;
     }
+
 }

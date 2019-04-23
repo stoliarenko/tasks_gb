@@ -20,6 +20,7 @@ public class DaylyAverageGraphDataProvider extends AbstractGraphDataProvider {
     @Override
     public Map<String, Double> getGraphData() {
         if (orderListProvider == null) return graphData;
+        graphData.clear();
         @NonNull final List<Order> orderList = orderListProvider.getOrderList();
 
         for (@Nullable final Order order : orderList) {
