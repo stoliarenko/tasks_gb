@@ -1,7 +1,9 @@
-/.metadata/
-/target/
-/.settings/
-/.recommenders/
+**/.metadata/
+**/target/
+**/.settings/
+**/.recommenders/
+**/.idea/
+
 *.zip
 *.class
 *.project
