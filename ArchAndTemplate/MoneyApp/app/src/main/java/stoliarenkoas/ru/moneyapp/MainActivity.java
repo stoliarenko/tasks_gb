@@ -6,11 +6,15 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import stoliarenkoas.ru.moneyapp.db.DataBaseHelper;
+import stoliarenkoas.ru.moneyapp.db.OrderDBImpl;
 import stoliarenkoas.ru.moneyapp.entity.Category;
 import stoliarenkoas.ru.moneyapp.entity.Order;
 import stoliarenkoas.ru.moneyapp.entity.OrderBuilder;
@@ -18,6 +22,7 @@ import stoliarenkoas.ru.moneyapp.entity.OrderBuilder;
 public class MainActivity extends AppCompatActivity {
 
     private List<Order> orderList = new ArrayList<>();
+    private OrderDBImpl dataBase = new OrderDBImpl(new DataBaseHelper(this));
 
     private RecyclerView recyclerView;
     private MyAdapter mAdapter;
@@ -29,14 +34,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         initRecyclerView();
-
-        OrderBuilder builder = new OrderBuilder();
-        builder.setCategory(Category.FOOD_BASIC.name())
-                .setDescription("descrrrffvd")
-                .setPrice(666.000);
-        orderList.add(builder.makeOrder());
-        orderList.add(builder.makeOrder());
-        orderList.add(builder.makeOrder());
+        addBtnListener();
+//        OrderBuilder builder = new OrderBuilder();
+//        builder.setCategory(Category.FOOD_BASIC.name())
+//                .setDescription("descrrrffvd")
+//                .setPrice(666.000);
+//        orderList.add(builder.makeOrder());
+//        orderList.add(builder.makeOrder());
+//        orderList.add(builder.makeOrder());
     }
 
     private void initRecyclerView(){
@@ -64,5 +69,46 @@ public class MainActivity extends AppCompatActivity {
 
         recyclerView.setAdapter(mAdapter);
     }
+
+    private void addBtnListener() {
+        final Button button = (Button) findViewById(R.id.button_add_order);
+        final EditText description = findViewById(R.id.field_description);
+        final EditText type = findViewById(R.id.field_type);
+        final EditText price = findViewById(R.id.field_price);
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final OrderBuilder builder = new OrderBuilder();
+                builder.setCategory(type.getText().toString())
+                        .setDescription(description.getText().toString())
+                        .setPrice(Double.parseDouble(price.getText().toString()));
+                final Order order = builder.makeOrder();
+                orderList.add(order);
+                dataBase.putOrder(order);
+            }
+        });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        dataBase.open();
+        if (orderList.isEmpty()) orderList.addAll(dataBase.getOrders());
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        dataBase.close();
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        dataBase.open();
+    }
+
+
 
 }

@@ -4,14 +4,14 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-class DataBaseHelper extends SQLiteOpenHelper {
+public class DataBaseHelper extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "money.db";
     private static final int DB_VERSION = 1;
 
     static final String TABLE_ORDERS = "orders";
 
-    DataBaseHelper(Context context) {
+    public DataBaseHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
     }
 
