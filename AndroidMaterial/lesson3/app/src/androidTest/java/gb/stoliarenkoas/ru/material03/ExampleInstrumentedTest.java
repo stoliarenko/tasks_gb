@@ -1,7 +1,6 @@
 package gb.stoliarenkoas.ru.material03;
 
 import android.content.Context;
-
 import androidx.test.InstrumentationRegistry;
 import androidx.test.runner.AndroidJUnit4;
 
