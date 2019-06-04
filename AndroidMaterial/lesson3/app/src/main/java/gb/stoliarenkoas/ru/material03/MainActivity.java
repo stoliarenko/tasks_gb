@@ -1,13 +1,17 @@
 package gb.stoliarenkoas.ru.material03;
 
 import android.animation.Animator;
+import android.animation.AnimatorInflater;
 import android.animation.AnimatorListenerAdapter;
+import android.graphics.drawable.AnimatedVectorDrawable;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,6 +21,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
+import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat;
 
 import com.github.rubensousa.gravitysnaphelper.GravitySnapHelper;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -36,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private Button buttonThree;
 
     private Adapter adapter;
+    FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,33 +57,28 @@ public class MainActivity extends AppCompatActivity {
         buttonOne = findViewById(R.id.button_one);
         buttonTwo = findViewById(R.id.button_two);
         buttonThree = findViewById(R.id.button_three);
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(fabOnClickListener);
+        fab = findViewById(R.id.fab);
+
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+            = item -> {
+                switch (item.getItemId()) {
+                    case R.id.navigation_home:
+                        initFragmentOne();
+                        return true;
+                    case R.id.navigation_dashboard:
+                        initFragmentTwo();
+                        return true;
+                    case R.id.navigation_notifications:
+                        FragmentTransaction transaction3 = getSupportFragmentManager().beginTransaction();
+                        transaction3.replace(R.id.main_frame, new Fragment3()).commit();
+                        return true;
+                }
+                return false;
+            };
 
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.navigation_home:
-                    FragmentTransaction transaction1 = getSupportFragmentManager().beginTransaction();
-                    transaction1.replace(R.id.main_frame, new Fragment1()).commit();
-                    return true;
-                case R.id.navigation_dashboard:
-                    initFragmentTwo();
-                    return true;
-                case R.id.navigation_notifications:
-                    FragmentTransaction transaction3 = getSupportFragmentManager().beginTransaction();
-                    transaction3.replace(R.id.main_frame, new Fragment3()).commit();
-                    return true;
-            }
-            return false;
-        }
-    };
-
-    private View.OnClickListener fabOnClickListener = new View.OnClickListener() {
+    private View.OnClickListener fabOnClickListenerFragmentTwo = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             adapter.onItemDelete(0);
@@ -109,6 +110,14 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    private List<Message> initList() {
+        final List<Message> messageList = new ArrayList<>();
+        for (int i = 0; i < 15; i++) {
+            messageList.add(new Message("NAME#" + i, "Message text N" + i, Message.Type.FRIEND));
+            messageList.add(new Message("YOU", "Your text N" + i, Message.Type.SELF));
+        }
+        return messageList;
+    }
 
     private void initFragmentTwo() {
         FragmentTransaction transaction2 = getSupportFragmentManager().beginTransaction();
@@ -130,15 +139,24 @@ public class MainActivity extends AppCompatActivity {
         FlipInTopXAnimator animator = new FlipInTopXAnimator();
         animator.setRemoveDuration(500);
         recyclerView.setItemAnimator(animator);
+        fab.setOnClickListener(fabOnClickListenerFragmentTwo);
+
     }
 
-    private List<Message> initList() {
-        final List<Message> messageList = new ArrayList<>();
-        for (int i = 0; i < 15; i++) {
-            messageList.add(new Message("NAME#" + i, "Message text N" + i, Message.Type.FRIEND));
-            messageList.add(new Message("YOU", "Your text N" + i, Message.Type.SELF));
-        }
-        return messageList;
+    private void initFragmentOne() {
+        FragmentTransaction transaction1 = getSupportFragmentManager().beginTransaction();
+        transaction1.replace(R.id.main_frame, new Fragment1()).commitNow();
+
+        final TextView textView = findViewById(R.id.fragment_one_text_view);
+        final ImageView imageView = findViewById(R.id.fragment_one_image_view);
+
+        fab.setOnClickListener((v) -> {
+            Animator animator = AnimatorInflater.loadAnimator(this, R.animator.button_animator);
+            animator.setTarget(textView);
+            animator.start();
+            ((AnimatedVectorDrawable)imageView.getDrawable()).start();
+        });
+
     }
 
 }
