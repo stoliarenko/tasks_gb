@@ -6,14 +6,13 @@ import android.animation.AnimatorListenerAdapter;
 import android.graphics.drawable.AnimatedVectorDrawable;
 import android.os.Bundle;
 import android.view.Gravity;
-import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentTransaction;
@@ -21,7 +20,12 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
-import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat;
+import androidx.transition.ChangeBounds;
+import androidx.transition.PathMotion;
+import androidx.transition.Scene;
+import androidx.transition.Slide;
+import androidx.transition.TransitionManager;
+import androidx.transition.TransitionSet;
 
 import com.github.rubensousa.gravitysnaphelper.GravitySnapHelper;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -71,8 +75,7 @@ public class MainActivity extends AppCompatActivity {
                         initFragmentTwo();
                         return true;
                     case R.id.navigation_notifications:
-                        FragmentTransaction transaction3 = getSupportFragmentManager().beginTransaction();
-                        transaction3.replace(R.id.main_frame, new Fragment3()).commit();
+                        initFragmentThree();
                         return true;
                 }
                 return false;
@@ -121,7 +124,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void initFragmentTwo() {
         FragmentTransaction transaction2 = getSupportFragmentManager().beginTransaction();
-        transaction2.replace(R.id.main_frame, new Fragment2()).commitNow();
+        transaction2.replace(R.id.main_frame, new Fragment2())
+                .setCustomAnimations(R.anim.come_from_below, R.anim.come_from_right)
+                .commitNow();
         List<Message> messages = initList();
 
         RecyclerView recyclerView = findViewById(R.id.chat_recycler_view);
@@ -145,18 +150,42 @@ public class MainActivity extends AppCompatActivity {
 
     private void initFragmentOne() {
         FragmentTransaction transaction1 = getSupportFragmentManager().beginTransaction();
-        transaction1.replace(R.id.main_frame, new Fragment1()).commitNow();
+        transaction1.replace(R.id.main_frame, new Fragment1())
+                .setCustomAnimations(R.anim.come_from_left, R.anim.come_from_right)
+                .commit();
 
-        final TextView textView = findViewById(R.id.fragment_one_text_view);
-        final ImageView imageView = findViewById(R.id.fragment_one_image_view);
+        transaction1.runOnCommit(() -> {
+            final TextView textView = findViewById(R.id.fragment_one_text_view);
+            final ImageView imageView = findViewById(R.id.fragment_one_image_view);
 
-        fab.setOnClickListener((v) -> {
-            Animator animator = AnimatorInflater.loadAnimator(this, R.animator.button_animator);
-            animator.setTarget(textView);
-            animator.start();
-            ((AnimatedVectorDrawable)imageView.getDrawable()).start();
+            fab.setOnClickListener((v) -> {
+                Animator animator = AnimatorInflater.loadAnimator(this, R.animator.button_animator);
+                animator.setTarget(textView);
+                animator.start();
+                ((AnimatedVectorDrawable)imageView.getDrawable()).start();
+            });
         });
+    }
 
+    private void initFragmentThree() {
+        FragmentTransaction transaction3 = getSupportFragmentManager().beginTransaction();
+        transaction3.replace(R.id.main_frame, new Fragment3())
+                .setCustomAnimations(R.anim.come_from_right, R.anim.come_from_left)
+                .commitNow();
+
+        final ViewGroup root = findViewById(R.id.fragment3_root);
+        final Scene scene1 = new Scene(root);
+        final Scene scene2 = Scene.getSceneForLayout(root, R.layout.fragment_fragment3_scene2, this);
+
+        fab.setOnClickListener((v -> swapScene(scene2)));
+    }
+
+    private void swapScene(final Scene to) {
+        final TransitionSet transitionSet = new TransitionSet();
+        transitionSet.addTransition(new Slide());
+        transitionSet.setOrdering(TransitionSet.ORDERING_TOGETHER);
+        transitionSet.setDuration(2000);
+        TransitionManager.go(to, transitionSet);
     }
 
 }
