@@ -1,5 +1,6 @@
 package gb.stoliarenkoas.ru.lesson7;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
@@ -10,6 +11,7 @@ import java.util.List;
 public class PagerAdapter extends FragmentPagerAdapter {
 
     private List<Fragment> fragmentList = new ArrayList<>();
+    private List<String> titleList = new ArrayList<>();
 
     public PagerAdapter(FragmentManager fm) {
         super(fm);
@@ -25,7 +27,14 @@ public class PagerAdapter extends FragmentPagerAdapter {
         return fragmentList.size();
     }
 
-    public void addFragment(Fragment fragment) {
+    @Nullable
+    @Override
+    public CharSequence getPageTitle(int position) {
+        return titleList.get(position);
+    }
+
+    public void addFragment(Fragment fragment, String title) {
         fragmentList.add(fragment);
+        titleList.add(title);
     }
 }
