@@ -8,7 +8,6 @@ import ru.stoliarenko.gb.spring.task1.model.AmmoType;
 import ru.stoliarenko.gb.spring.task1.model.api.Ammo;
 import ru.stoliarenko.gb.spring.task1.model.api.Gun;
 
-@Component
 public class LightRevolver implements Gun {
 
     private static final int BARREL_SIZE = 5;

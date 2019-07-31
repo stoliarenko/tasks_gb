@@ -9,7 +9,6 @@ import ru.stoliarenko.gb.spring.task1.model.AmmoType;
 import ru.stoliarenko.gb.spring.task1.model.api.Ammo;
 
 @Light
-@Component
 public class BoxOfBullets9mm implements Ammo {
 
     private int count = 32;
