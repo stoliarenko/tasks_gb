@@ -27,7 +27,11 @@ public class Application {
             System.out.println(bullets.getCount() + " bullest remaining in box.");
             revolver.shoot();
         }
-        System.out.println("No more bullets in the box.");
+        System.out.println("No more bullets in the box.\n\n");
+
+        final Gun lightRevolver = context.getBean("lightRevolver", Gun.class);
+        while (lightRevolver.shoot());
+        System.out.println("End of shooting!");
     }
 
 }
