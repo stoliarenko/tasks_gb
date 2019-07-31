@@ -8,8 +8,8 @@
        http://www.springframework.org/schema/beans/spring-beans-2.0.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
     <context:component-scan base-package="ru.stoliarenko.gb.spring.task1">
-        <context:include-filter type="regex" expression=".*9mm"/>
-        <context:include-filter type="assignable" expression="ru.stoliarenko.gb.spring.task1.model.gun.LightRevolver"/>
+        <context:include-filter type="regex" expression="(.*Deprecated.*)|(.*Addressing.*)"/>
+        <context:include-filter type="assignable" expression="ru.stoliarenko.gb.spring.task1.model.gun.DeprecatedRevolver"/>
     </context:component-scan>
 
     <bean id="shellBox"
@@ -19,6 +19,16 @@
           factory-bean="gunsConfiguration"
           factory-method="getPlainOldShotgun">
         <constructor-arg ref="shellBox"/>
+    </bean>
+
+    <bean id="customAutowireConfigurer"
+          class="org.springframework.beans.factory.annotation.CustomAutowireConfigurer">
+        <property name="customQualifierTypes">
+            <set>
+                <value>java.lang.Deprecated</value>
+                <value>javax.xml.ws.soap.Addressing</value>
+            </set>
+        </property>
     </bean>
 
 </beans>

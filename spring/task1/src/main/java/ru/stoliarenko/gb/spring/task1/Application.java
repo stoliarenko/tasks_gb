@@ -6,6 +6,7 @@ import ru.stoliarenko.gb.spring.task1.model.ammo.BoxOfBullets;
 import ru.stoliarenko.gb.spring.task1.model.ammo.BoxOfShells;
 import ru.stoliarenko.gb.spring.task1.model.api.Ammo;
 import ru.stoliarenko.gb.spring.task1.model.api.Gun;
+import ru.stoliarenko.gb.spring.task1.model.api.Human;
 import ru.stoliarenko.gb.spring.task1.model.gun.Shotgun;
 
 public class Application {
@@ -29,9 +30,8 @@ public class Application {
         }
         System.out.println("No more bullets in the box.\n\n");
 
-        final Gun lightRevolver = context.getBean("lightRevolver", Gun.class);
-        while (lightRevolver.shoot());
-        System.out.println("End of shooting!");
+        final Human cowboy = context.getBean(Human.class);
+        cowboy.perform();
     }
 
 }

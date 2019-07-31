@@ -2,16 +2,15 @@ package ru.stoliarenko.gb.spring.task1.model.ammo;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.springframework.stereotype.Component;
-import ru.stoliarenko.gb.spring.task1.annotation.Heavy;
-import ru.stoliarenko.gb.spring.task1.annotation.Light;
 import ru.stoliarenko.gb.spring.task1.model.AmmoType;
 import ru.stoliarenko.gb.spring.task1.model.api.Ammo;
 
-@Light
-public class BoxOfBullets9mm implements Ammo {
+import javax.xml.ws.soap.Addressing;
 
-    private int count = 32;
+@Addressing
+public class BoxOfAddressingBullets implements Ammo {
+
+    private int count = 7;
 
     @NotNull
     @Override

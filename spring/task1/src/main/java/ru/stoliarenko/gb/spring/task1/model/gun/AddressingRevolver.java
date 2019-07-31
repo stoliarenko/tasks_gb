@@ -1,19 +1,21 @@
 package ru.stoliarenko.gb.spring.task1.model.gun;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import ru.stoliarenko.gb.spring.task1.annotation.Heavy;
 import ru.stoliarenko.gb.spring.task1.model.AmmoType;
 import ru.stoliarenko.gb.spring.task1.model.api.Ammo;
 import ru.stoliarenko.gb.spring.task1.model.api.Gun;
 
-public class HeavyRevolver implements Gun {
+import javax.xml.ws.soap.Addressing;
 
-    private static final int BARREL_SIZE = 6;
+@Addressing
+public class AddressingRevolver implements Gun {
+
+    private static final int BARREL_SIZE = 5;
 
     private int loadedBulletsCount = 0;
 
     private Ammo bulletBox;
-    @Autowired @Heavy
+    @Autowired @Addressing
     public void setBulletBox(Ammo ammo) {
         this.bulletBox = ammo;
     }
@@ -30,9 +32,10 @@ public class HeavyRevolver implements Gun {
         }
         final int totalShellCount = bulletBox.getCount();
         if (totalShellCount == 0) {
-            System.out.println("Zero shellBox available.");
+            System.out.println("Zero bullets available.");
             return false;
         }
+        System.out.println("Reloading addressing gun");
         final int bulletsToTake = BARREL_SIZE - loadedBulletsCount;
         if (bulletsToTake < 1) {
             System.out.println("No need to load, barrel is full");
@@ -44,8 +47,12 @@ public class HeavyRevolver implements Gun {
 
     @Override
     public boolean shoot() {
-        reload();
-        System.out.println("It doesnt shoot, but you always can use it as a blunt.");
-        return false;
+        if (loadedBulletsCount < 1) {
+            final boolean hasAmmo = reload();
+            if (!hasAmmo) return false;
+        }
+        System.out.println("Addressing-Bang!");
+        loadedBulletsCount--;
+        return true;
     }
 }

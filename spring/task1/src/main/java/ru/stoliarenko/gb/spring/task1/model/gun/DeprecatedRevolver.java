@@ -1,23 +1,21 @@
 package ru.stoliarenko.gb.spring.task1.model.gun;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import ru.stoliarenko.gb.spring.task1.annotation.Heavy;
-import ru.stoliarenko.gb.spring.task1.annotation.Light;
 import ru.stoliarenko.gb.spring.task1.model.AmmoType;
 import ru.stoliarenko.gb.spring.task1.model.api.Ammo;
 import ru.stoliarenko.gb.spring.task1.model.api.Gun;
 
-public class LightRevolver implements Gun {
+@Deprecated
+public class DeprecatedRevolver implements Gun {
 
     private static final int BARREL_SIZE = 5;
 
     private int loadedBulletsCount = 0;
 
     private Ammo bulletBox;
-    @Autowired @Light
-    public void setBulletBox(Ammo bulletBox) {
-        this.bulletBox = bulletBox;
+    @Autowired @Deprecated
+    public void setBulletBox(Ammo ammo) {
+        this.bulletBox = ammo;
     }
 
     @Override
@@ -35,6 +33,7 @@ public class LightRevolver implements Gun {
             System.out.println("Zero bullets available.");
             return false;
         }
+        System.out.println("Reloading deprecated gun");
         final int bulletsToTake = BARREL_SIZE - loadedBulletsCount;
         if (bulletsToTake < 1) {
             System.out.println("No need to load, barrel is full");
@@ -50,11 +49,8 @@ public class LightRevolver implements Gun {
             final boolean hasAmmo = reload();
             if (!hasAmmo) return false;
         }
-        System.out.print("bang!");
-        while (--loadedBulletsCount > 0) {
-            System.out.print("-bang!");
-        }
-        System.out.println();
+        System.out.println("Deprecated-Bang!");
+        loadedBulletsCount--;
         return true;
     }
 }
