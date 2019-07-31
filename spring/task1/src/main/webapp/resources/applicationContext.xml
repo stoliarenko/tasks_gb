@@ -9,4 +9,13 @@
 
     <context:component-scan base-package="ru.stoliarenko.gb.spring.task1"/>
 
+    <bean id="shellBox"
+          factory-bean="gunsConfiguration"
+          factory-method="getBoxOfShells"/>
+    <bean name="shotgun"
+          factory-bean="gunsConfiguration"
+          factory-method="getPlainOldShotgun">
+        <constructor-arg ref="shellBox"/>
+    </bean>
+
 </beans>
