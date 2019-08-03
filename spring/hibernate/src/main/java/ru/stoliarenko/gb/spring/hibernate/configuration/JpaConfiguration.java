@@ -22,8 +22,8 @@ public class JpaConfiguration {
     @Bean(name = "dataSource")
     public DataSource dataSource() {
         final DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName("org.h2.Driver");
-        dataSource.setUrl("jdbc:h2:mem:foo;DB_CLOSE_DELAY=-1");
+        dataSource.setDriverClassName("org.hsqldb.jdbc.JDBCDriver");
+        dataSource.setUrl("jdbc:hsqldb:mem:testdb;DB_CLOSE_DELAY=-1");
         return dataSource;
     }
 
@@ -37,7 +37,7 @@ public class JpaConfiguration {
         factory.setPackagesToScan("ru.stoliarenko.gb.spring.hibernate.model");
 
         final Properties jpaProperties = new Properties();
-        jpaProperties.put(Environment.DIALECT, "org.hibernate.dialect.H2Dialect");
+        jpaProperties.put(Environment.DIALECT, "org.hibernate.dialect.HSQLDialect");
         jpaProperties.put(Environment.HBM2DDL_AUTO, "update");
         jpaProperties.put(Environment.SHOW_SQL, "true");
         factory.setJpaProperties(jpaProperties);

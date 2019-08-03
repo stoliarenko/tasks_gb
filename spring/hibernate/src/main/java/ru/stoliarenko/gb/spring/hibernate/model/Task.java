@@ -1,5 +1,7 @@
 package ru.stoliarenko.gb.spring.hibernate.model;
 
+import ru.stoliarenko.gb.spring.hibernate.enumerated.Status;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.UUID;
@@ -18,6 +20,9 @@ public class Task implements Serializable {
 
     @Column(name = "task_description")
     private String description;
+
+    @Enumerated(EnumType.STRING)
+    private Status status = Status.NEW;
 
     public String getId() {
         return id;
@@ -51,4 +56,11 @@ public class Task implements Serializable {
         this.description = description;
     }
 
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
 }

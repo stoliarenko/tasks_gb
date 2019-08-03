@@ -1,5 +1,7 @@
 package ru.stoliarenko.gb.spring.hibernate.model;
 
+import ru.stoliarenko.gb.spring.hibernate.enumerated.Status;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
@@ -20,7 +22,10 @@ public class Project implements Serializable {
     @Column(name = "project_description")
     private String description;
 
-    @OneToMany(mappedBy = "project")
+    @Enumerated(EnumType.STRING)
+    private Status status = Status.NEW;
+
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
     private List<Task> tasks;
 
     public String getId() {
@@ -53,6 +58,14 @@ public class Project implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 
     public List<Task> getTasks() {

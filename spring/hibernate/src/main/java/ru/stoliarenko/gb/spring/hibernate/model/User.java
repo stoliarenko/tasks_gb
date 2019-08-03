@@ -14,7 +14,7 @@ public class User implements Serializable {
     @Column(name = "user_name")
     private String name;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", orphanRemoval = true)
     private List<Project> projects;
 
     public String getId() {
