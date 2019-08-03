@@ -2,15 +2,13 @@ package ru.stoliarenko.gb.spring.task1.model.ammo;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.springframework.stereotype.Component;
-import ru.stoliarenko.gb.spring.task1.annotation.Heavy;
 import ru.stoliarenko.gb.spring.task1.model.AmmoType;
 import ru.stoliarenko.gb.spring.task1.model.api.Ammo;
 
-@Heavy
-public class BoxOfBullets implements Ammo {
+@Deprecated
+public class BoxOfDeprecatedBullets implements Ammo {
 
-    private int count = 30;
+    private int count = 7;
 
     @NotNull
     @Override

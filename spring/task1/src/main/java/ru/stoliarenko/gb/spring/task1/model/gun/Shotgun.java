@@ -30,7 +30,7 @@ public class Shotgun implements Gun {
         }
         final int totalShellCount = shellBox.getCount();
         if (totalShellCount == 0) {
-            System.out.println("Zero shellBox available.");
+            System.out.println("Zero shells available.");
             return false;
         }
         final int shellsToTake = BARREL_COUNT - loadedShellsCount;
