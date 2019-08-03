@@ -22,7 +22,7 @@ public class TaskDAO {
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public List<Task> getAll() {
-        return entityManager.createQuery("FROM Task", Task.class).getResultList();
+        return entityManager.createQuery("FROM app_task", Task.class).getResultList();
     }
 
     @Transactional

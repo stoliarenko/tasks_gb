@@ -22,7 +22,7 @@ public class ProjectDAO {
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public List<Project> getAll() {
-        return entityManager.createQuery("FROM Project", Project.class).getResultList();
+        return entityManager.createQuery("FROM app_project", Project.class).getResultList();
     }
 
     @Transactional

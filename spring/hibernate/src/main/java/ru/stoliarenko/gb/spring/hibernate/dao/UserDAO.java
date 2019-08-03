@@ -22,7 +22,7 @@ public class UserDAO {
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public List<User> getAll() {
-        return entityManager.createQuery("FROM User", User.class).getResultList();
+        return entityManager.createQuery("FROM app_user", User.class).getResultList();
     }
 
     @Transactional
