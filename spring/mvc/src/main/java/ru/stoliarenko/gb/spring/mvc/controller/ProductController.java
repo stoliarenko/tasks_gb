@@ -8,19 +8,26 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.view.RedirectView;
+import ru.stoliarenko.gb.spring.mvc.configuration.DataGenerator;
+import ru.stoliarenko.gb.spring.mvc.dao.ProductDao;
 import ru.stoliarenko.gb.spring.mvc.entity.Product;
-import ru.stoliarenko.gb.spring.mvc.repository.ProductRepository;
+
+import javax.annotation.PostConstruct;
 
 @Controller
 @RequestMapping("/product")
 public class ProductController {
 
     @Autowired
-    private ProductRepository productRepository;
+    private ProductDao productDao;
 
     @GetMapping("/all")
-    public String list(Model model) {
-        model.addAttribute("products", productRepository.findAll());
+    public String list(
+            Model model,
+            @RequestParam(value = "title", required = false) String title,
+            @RequestParam(value = "cost", required = false) Long cost
+    ) {
+        model.addAttribute("products", productDao.findAll(title, cost));
         return "product-list";
     }
 
@@ -29,8 +36,13 @@ public class ProductController {
         Product product = new Product();
         product.setTitle(title);
         product.setCost(cost);
-        productRepository.save(product);
+        productDao.save(product);
         return new RedirectView("/mvc/product/all");
+    }
+
+    @PostConstruct
+    public void init() {
+        DataGenerator.generateProducts().forEach(productDao::save);
     }
 
 }

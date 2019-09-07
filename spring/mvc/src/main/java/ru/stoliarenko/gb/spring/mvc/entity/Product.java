@@ -1,18 +1,35 @@
 package ru.stoliarenko.gb.spring.mvc.entity;
 
-import java.util.UUID;
+import javax.persistence.*;
+import java.util.List;
 
+@Entity
 public class Product {
 
-    private String id = UUID.randomUUID().toString();
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     private String title;
+
     private Long cost;
 
-    public String getId() {
+    @ManyToMany(fetch = FetchType.EAGER)
+    private List<Customer> customers;
+
+    public List<Customer> getCustomers() {
+        return customers;
+    }
+
+    public void setCustomers(List<Customer> customers) {
+        this.customers = customers;
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
