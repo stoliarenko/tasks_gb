@@ -6,6 +6,9 @@ import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+
 /**
  * Серверная часть чата - обеспечивает 
  * добавление, хранение и удаление клиентов,
@@ -16,6 +19,8 @@ import java.util.concurrent.ConcurrentHashMap;
 public class Server {
     private static final Map<User, Connection> CONNECTIONS = new ConcurrentHashMap<>();
 
+    private static Executor executor = Executors.newCachedThreadPool();
+
     public static void main(String[] args) {
         try {
             //Запуск сервера
@@ -25,8 +30,7 @@ public class Server {
             //Сюда будут добавлены управляющие конструкции из GUI TODO
             while(true) {
                 try {
-                    final ConnectionHandler handler = new ConnectionHandler(sSocket.accept());
-                    handler.start();
+                    executor.execute(new ConnectionHandler(sSocket.accept()));
                 } catch (Exception e) {
                     sSocket.close();
                     ServerLogger.writeMessage("Server is down.");
